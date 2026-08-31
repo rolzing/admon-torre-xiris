@@ -1,48 +1,36 @@
 // ============================================================
-//  hooks/useAuth.js — AUTENTICACIÓN
+//  hooks/useAuth.jsx — ESTADO DE AUTENTICACIÓN (React Context)
 //  ============================================================
-//  En modo DEMO usa login local contra mockData.js.
-//  En producción se sustituye por Firebase Auth
-//  (signInWithEmailAndPassword) y el rol se leería
-//  de Firestore / custom claims.
+//  Expone { usuario, esAdmin, login, logout }.
+//  La lógica real (Appwrite o mock) vive en services/auth.service.js;
+//  este hook solo gestiona el estado en React y la persistencia local.
 // ============================================================
 
-import { createContext, useContext, useEffect, useState } from 'react'
-import { loginDemo } from '../services/mockData'
-// import { auth, signInWithEmailAndPassword } from './authReal' // producción
+import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { signIn, signOut } from '../services/auth.service'
+import { USER_SESSION_KEY, readStored, writeStored } from '../utils/storage'
 
 const AuthContext = createContext(null)
 
-const STORAGE_KEY = 'condominio.session'
-
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      return raw ? JSON.parse(raw) : null
-    } catch {
-      return null
-    }
-  })
+  const [usuario, setUsuario] = useState(() => readStored(USER_SESSION_KEY))
 
+  // Persistir sesión local (solo relevante en modo demo; en Appwrite
+  // la sesión la maneja el propio SDK con su cookie/session).
   useEffect(() => {
-    if (usuario) localStorage.setItem(STORAGE_KEY, JSON.stringify(usuario))
-    else localStorage.removeItem(STORAGE_KEY)
+    writeStored(USER_SESSION_KEY, usuario)
   }, [usuario])
 
-  const login = async (email, password) => {
-    // DEMO: validar contra datos mock.
-    const result = loginDemo(email, password)
-    if (!result) {
-      throw new Error('Credenciales incorrectas. Revisa tu email y contraseña.')
-    }
-    setUsuario(result.usuario)
-    return result.usuario
-  }
+  const login = useCallback(async (email, password) => {
+    const user = await signIn(email, password)
+    setUsuario(user)
+    return user
+  }, [])
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
+    await signOut()
     setUsuario(null)
-  }
+  }, [])
 
   const esAdmin = usuario?.rol === 'admin'
 

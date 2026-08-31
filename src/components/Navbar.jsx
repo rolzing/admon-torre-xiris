@@ -4,7 +4,7 @@
 
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { TORRE } from '../services/mockData'
+import { TORRE } from '../config/torre'
 import {
   IconoEdificio,
   IconoDolar,

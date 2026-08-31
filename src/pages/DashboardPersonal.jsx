@@ -11,7 +11,7 @@ import { IconoRecibo, IconoReloj } from '../components/Icons'
 
 export default function DashboardPersonal() {
   const { usuario } = useAuth()
-  const estado = useEstadoCuenta(usuario?.id)
+  const { estado } = useEstadoCuenta(usuario?.id)
   const historial = estado?.historial || []
 
   const totalAdeudo = historial.reduce((s, h) => s + h.adeudo, 0)

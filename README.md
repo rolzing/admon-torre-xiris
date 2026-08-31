@@ -6,7 +6,8 @@ por una plataforma clara donde cada inquilino consulta su información: finanzas
 documentos y estados de cuenta.
 
 > **Demo:** se ejecuta 100% con datos de ejemplo (mock), sin necesidad de credenciales.
-> El código ya está estructurado para conectarse a Firebase + Google Sheets en producción.
+> El código ya está estructurado para conectarse a **Appwrite** (Auth + Database + Storage)
+> y a Google Sheets en producción.
 
 ---
 
@@ -57,7 +58,7 @@ Cualquier otra unidad usa `demo123` (unidad202, unidad301, unidad302, unidad303)
 - **React 18 + Vite** (build rápido, despliegue sencillo en Vercel)
 - **React Router** para navegación
 - **Tailwind CSS** para el estilo visual (cards, sombras suaves, azul marino + acento verde)
-- **Firebase SDK** (Auth, Firestore, Storage) — *estructura lista, uso mock en demo*
+- **Appwrite** (Auth + Database + Storage) — *estructura lista, uso mock en demo*
 - **Sin backend propio**: sin Express, sin servidor Node independiente
 
 ---
@@ -66,42 +67,53 @@ Cualquier otra unidad usa `demo123` (unidad202, unidad301, unidad302, unidad303)
 
 ```
 src/
-├── services/
-│   ├── firebase.js      # Inicialización de Firebase (placeholder de env vars)
-│   └── mockData.js      # Datos de ejemplo (simulan lo que vendría de Sheets/Firebase)
+├── services/            # Capa de servicios (cada archivo = una responsabilidad)
+│   ├── auth.service.js       # Autenticación y sesión (Appwrite Auth o mock)
+│   ├── finanzas.service.js   # Fondo, gastos, pagos, morosidad (Database o mock)
+│   ├── avisos.service.js     # Muro de avisos
+│   ├── documentos.service.js # Repositorio documental
+│   ├── estadosCuenta.service.js # Estados de cuenta y unidades
+│   ├── storage.service.js    # Archivos (Appwrite Storage o mock)
+│   ├── buscar.service.js     # Búsqueda por palabra clave
+│   └── mockData.js           # Datos de ejemplo (simulan lo que vendría de Appwrite/Sheets)
 ├── config/
+│   ├── appwrite.js      # Inicialización del cliente Appwrite (env vars)
+│   ├── torre.js         # Identidad estática de la torre
 │   └── whatsapp.js      # Placeholder de config Twilio (sin lógica implementada)
 ├── pages/               # Login, DashboardGeneral, DashboardPersonal, Finanzas,
 │                        # EstadosCuenta, Avisos, Documentos, Buscador, AdminPanel
 ├── components/          # Navbar, Card, StatCard, Table, Badge, SearchBar, Button, Layout…
-├── hooks/               # useAuth, useFinanzas, useEstadoCuenta
-├── utils/format.js      # formato de moneda y fechas
+├── hooks/               # useAuth, useFinanzas, useEstadoCuenta, useAvisos, useDocumentos
+├── utils/               # format (moneda/fechas), storage (claves locales)
 ├── App.jsx              # rutas + guard de autenticación/rol
 └── main.jsx
-.env.example             # variables de entorno documentadas (Firebase + Twilio)
+.env.example             # variables de entorno documentadas (Appwrite + Twilio)
 ```
 
 ---
 
 ## 🔐 Variables de entorno
 
-Copia `.env.example` a `.env` **solo si vas a conectar un proyecto Firebase real**. Para el
+Copia `.env.example` a `.env` **solo si vas a conectar un proyecto Appwrite real**. Para el
 demo no hace falta.
 
 | Variable | Para qué sirve |
 | -------- | -------------- |
-| `VITE_FIREBASE_API_KEY` | Firebase Auth |
-| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase Auth |
-| `VITE_FIREBASE_PROJECT_ID` | Firestore + proyecto |
-| `VITE_FIREBASE_STORAGE_BUCKET` | Storage (documentos/recibos) |
-| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Firebase |
-| `VITE_FIREBASE_APP_ID` | Firebase |
+| `VITE_APPWRITE_ENDPOINT` | Appwrite (p. ej. `https://cloud.appwrite.io/v1`) |
+| `VITE_APPWRITE_PROJECT_ID` | ID del proyecto Appwrite |
+| `VITE_APPWRITE_DATABASE_ID` | ID de la Database |
+| `VITE_APPWRITE_COLLECTION_UNIDADES` | Colección de unidades |
+| `VITE_APPWRITE_COLLECTION_AVISOS` | Colección de avisos |
+| `VITE_APPWRITE_COLLECTION_DOCUMENTOS` | Colección de documentos |
+| `VITE_APPWRITE_COLLECTION_GASTOS` | Colección de gastos |
+| `VITE_APPWRITE_COLLECTION_PAGOS` | Colección de pagos |
+| `VITE_APPWRITE_STORAGE_BUCKET_ID` | Bucket de Storage (archivos) |
 | `VITE_TWILIO_ACCOUNT_SID` | Futuro bot WhatsApp (secreto) |
 | `VITE_TWILIO_AUTH_TOKEN` | Futuro bot WhatsApp (secreto) |
 | `VITE_TWILIO_WHATSAPP_NUMBER` | Número WhatsApp del bot |
 
 > ⚠️ Las variables de Twilio son **secretos**: en producción deben vivir en el entorno de la
-> Cloud Function (Firebase), **nunca** en el bundle del cliente. El archivo
+> función (Appwrite Functions / Vercel), **nunca** en el bundle del cliente. El archivo
 > `src/config/whatsapp.js` documenta el contrato de configuración.
 
 ---
@@ -112,32 +124,36 @@ demo no hace falta.
 2. En [vercel.com](https://vercel.com) → *New Project* → importa el repo.
 3. Vercel detecta automáticamente **Vite** (build `vite build`, output `dist`). No hace falta
    configuración extra.
-4. Opcional: agrega las variables de entorno (`VITE_FIREBASE_*`) en *Settings → Environment
-   Variables* cuando tengas un proyecto Firebase real.
+4. Opcional: agrega las variables de entorno (`VITE_APPWRITE_*`) con el endpoint y los IDs de
+   tu proyecto Appwrite en *Settings → Environment Variables*.
 
 ---
 
 ## 📝 Lo que falta implementar (demo → producción)
 
-1. **Firebase real**
-   - Crear proyecto en Firebase, habilitar Auth (email), Firestore y Storage.
-   - Crear usuarios con emails reales y asignar rol (campo `rol` en Firestore o *custom claims*).
-   - Sustituir los helpers de `mockData.js` por lecturas/escrituras reales a Firestore
-     (los archivos `services/firebase*.js` ya dejan definida la estructura).
+1. **Appwrite real**
+   - Crear un proyecto en Appwrite (console / cloud.appwrite.io), habilitar Auth (email),
+     crear una Database (con las colecciones de `unidades`, `avisos`, `documentos`, `gastos`
+     y `pagos`) y un Storage bucket.
+   - Crear usuarios con emails reales y asignar rol (atributo `rol` en la colección de unidades)
+     o usar *teams/roles* de Appwrite.
+   - Completar los `TODO(producción)` de los archivos en `src/services/` que ya dejan el punto de
+     integración (autenticación, lectura/escritura de datos y subida de archivos).
 
 2. **Sincronización con Google Sheets**
-   - Implementar una Cloud Function (o `@googleapis/sheets`) que lea la hoja de cálculo de la
-     administración y escriba en Firestore (gastos, pagos, estados de cuenta) de forma periódica.
-   - El comentario en `AdminPanel` y `mockData.js` documenta dónde iría esta integración.
+   - Implementar una Appwrite Function (o microservicio) que lea la hoja de cálculo de la
+     administración y escriba en Appwrite Database (gastos, pagos, estados de cuenta) de forma
+     periódica. El comentario en `AdminPanel` y `mockData.js` documenta dónde iría esta
+     integración.
 
 3. **Bot de WhatsApp vía Twilio**
-   - Crear una Cloud Function que reciba el webhook de Twilio y responda con el estado de cuenta
-     de la unidad, consultando la **misma** base de datos de Firebase.
-   - Configurar el número en el panel de Twilio. Ver `src/config/whatsapp.js`.
+   - Crear una función (Appwrite Function o microservicio) que reciba el webhook de Twilio y
+     responda con el estado de cuenta de la unidad, consultando la **misma** base de datos de
+     Appwrite. Configurar el número en el panel de Twilio. Ver `src/config/whatsapp.js`.
 
 4. **Generación de recibos PDF reales**
    - Actualmente el recibo se genera como un archivo de texto de demostración. Producción:
-     generar un PDF (p. ej. `pdf-lib` o `jsPDF`) o subir plantillas a Firebase Storage.
+     generar un PDF (p. ej. `pdf-lib` o `jsPDF`) o subir plantillas a Appwrite Storage.
 
 5. **Autenticación por unidad real**
    - Vincular cada cuenta al número de unidad y, opcionalmente, al número de teléfono para el

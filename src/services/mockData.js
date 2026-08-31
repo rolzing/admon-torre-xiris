@@ -2,18 +2,18 @@
 //  mockData.js — DATOS DE EJEMPLO (SEED)
 //  ============================================================
 //  Este archivo simula los datos que, en producción, llegarían
-//  desde Firebase Firestore (poblada a su vez desde Google
-//  Sheets mediante una sincronización).
+//  desde Appwrite Database (poblada a su vez desde Google Sheets
+//  mediante una sincronización).
 //
 //  ⚠️  NO es una copia de respaldo de producción: es solo una
 //  maqueta realista para que el demo funcione sin credenciales.
 //
 //  DATOS REALES vs. MOCK
 //  -----------------------------------------------------------------
-//  Cuando se conecte Firebase de verdad, estos mismos "helpers"
+//  Cuando se conecte Appwrite de verdad, estos mismos "helpers"
 //  (getFinanzas, getEstadosCuenta, getAvisos, getDocumentos,
 //  getUnidades, login) deberán reimplementarse en los servicios
-//  de Firebase correspondientes. La interfaz (páginas/componentes)
+//  de Appwrite correspondientes. La interfaz (páginas/componentes)
 //  ya quedó lista para consumir la misma forma de datos.
 // ============================================================
 
@@ -38,7 +38,7 @@ export const fondoComun = {
 
 // ---------- Unidades / inquilinos ----------
 // password es solo para el demo (detección de rol). En producción
-// se usaría Firebase Auth con emails reales y roles en Firestore.
+// se usaría Appwrite Auth con emails reales y roles en la base de datos.
 export const UNIDADES = [
   {
     id: 'u-101',
@@ -302,7 +302,7 @@ export const DOCUMENTOS = [
 ]
 
 // ---------- Helpers que consumen las páginas ----------
-// En producción estas funciones se reemplazan por lecturas a Firestore.
+// En producción estas funciones se reemplazan por lecturas a Appwrite Database.
 // La FORMA de los datos que regresan se mantiene igual.
 
 export function getFondoComun() {
@@ -353,7 +353,19 @@ export function getUnidadesMorosas() {
   }).filter((u) => u.adeudo > 0)
 }
 
-// Simulación de login local (demo). En producción lo hace Firebase Auth.
+// Unidades enriquecidas con su estado: adeudo total y meses pendientes.
+// Útil para el panel de administración.
+export function getUnidadesConEstado() {
+  return UNIDADES.map(({ password, ...unidad }) => {
+    const estado = ESTADOS_CUENTA.find((e) => e.unidad === unidad.numero)
+    const historial = estado?.historial || []
+    const adeudo = historial.reduce((sum, h) => sum + h.adeudo, 0)
+    const pendientes = historial.filter((h) => !h.pagado).map((h) => h.mes)
+    return { ...unidad, adeudo, pendientes }
+  })
+}
+
+// Simulación de login local (demo). En producción lo hace Appwrite Auth.
 export function loginDemo(email, password) {
   const user = UNIDADES.find((u) => u.email.toLowerCase() === email.trim().toLowerCase())
   if (user && user.password === password) {

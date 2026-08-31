@@ -1,18 +1,54 @@
 // ============================================================
-//  hooks/useEstadosCuenta.js
+//  hooks/useEstadosCuenta.js — ESTADO DE CUENTA DE LA UNIDAD
 //  ============================================================
-//  Expone el estado de cuenta de la unidad del usuario logueado,
-//  así como la lista de unidades morosas (vista general).
-//  En producción, estas lecturas provendrían de Firestore.
+//  Carga (async) el estado de cuenta de una unidad desde
+//  services/estadosCuenta.service.js (Appwrite o mock).
 // ============================================================
 
-import { useMemo } from 'react'
-import { getEstadoCuentaPorUnidad, getUnidadesMorosas } from '../services/mockData'
+import { useEffect, useState } from 'react'
+import { getEstadoCuenta, listUnidadesConEstado } from '../services/estadosCuenta.service'
 
 export function useEstadoCuenta(unidadId) {
-  return useMemo(() => getEstadoCuentaPorUnidad(unidadId), [unidadId])
+  const [estado, setEstado] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    ;(async () => {
+      if (!unidadId) {
+        if (active) setLoading(false)
+        return
+      }
+      const res = await getEstadoCuenta(unidadId)
+      if (!active) return
+      setEstado(res)
+      setLoading(false)
+    })()
+    return () => {
+      active = false
+    }
+  }, [unidadId])
+
+  return { estado, loading }
 }
 
-export function useUnidadesMorosas() {
-  return useMemo(() => getUnidadesMorosas(), [])
+export function useUnidades() {
+  const [unidades, setUnidades] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let active = true
+    ;(async () => {
+      const res = await listUnidadesConEstado()
+      if (!active) return
+      setUnidades(res)
+      setLoading(false)
+    })()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  return { unidades, loading }
 }

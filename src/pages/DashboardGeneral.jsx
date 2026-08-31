@@ -6,8 +6,10 @@ import Card from '../components/Card'
 import StatCard from '../components/StatCard'
 import { useAuth } from '../hooks/useAuth'
 import { useFinanzas } from '../hooks/useFinanzas'
+import { useAvisos } from '../hooks/useAvisos'
+import { useDocumentos } from '../hooks/useDocumentos'
 import { formatMoney } from '../utils/format'
-import { TORRE, getDocumentos, getAvisos } from '../services/mockData'
+import { TORRE } from '../config/torre'
 import {
   IconoDolar,
   IconoRecibo,
@@ -20,8 +22,8 @@ import {
 export default function DashboardGeneral() {
   const { usuario, esAdmin } = useAuth()
   const { saldo, ingresos, egresos, fondo, morosas } = useFinanzas()
-  const avisosRecientes = getAvisos().slice(0, 3)
-  const documentos = getDocumentos()
+  const { avisos: avisosRecientes } = useAvisos()
+  const { documentos } = useDocumentos()
 
   const quickLinks = [
     { to: '/finanzas', label: 'Finanzas', desc: 'Gastos, saldo y cuotas', icon: IconoDolar },
@@ -110,7 +112,7 @@ export default function DashboardGeneral() {
             </Link>
           </div>
           <ul className="divide-y divide-slate-100">
-            {avisosRecientes.map((a) => (
+            {avisosRecientes.slice(0, 3).map((a) => (
               <li key={a.id} className="py-3">
                 <div className="flex items-start gap-2">
                   {a.importante && (

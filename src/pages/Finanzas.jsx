@@ -9,7 +9,6 @@ import Badge from '../components/Badge'
 import PageHeader from '../components/PageHeader'
 import { useFinanzas } from '../hooks/useFinanzas'
 import { formatMoney, formatFecha } from '../utils/format'
-import { getGastosMes, getPagosMes } from '../services/mockData'
 import { IconoDolar, IconoGrafica, IconoEdificio } from '../components/Icons'
 
 const categoriaTone = (c) => {
@@ -23,9 +22,7 @@ const categoriaTone = (c) => {
 }
 
 export default function Finanzas() {
-  const { saldo, ingresos, egresos, fondo, morosas } = useFinanzas()
-  const gastos = getGastosMes()
-  const pagos = getPagosMes()
+  const { saldo, ingresos, egresos, fondo, morosas, gastos, pagos } = useFinanzas()
 
   const gastoColumns = [
     { key: 'categoria', label: 'Categoría', render: (c) => <Badge tone={categoriaTone(c)}>{c}</Badge> },

@@ -8,15 +8,10 @@ import Card from '../components/Card'
 import StatCard from '../components/StatCard'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
-import {
-  TORRE,
-  getFondoComun,
-  getUnidadesMorosas,
-  getAcuerdoReciente,
-  getDocumentos,
-  getAvisos,
-  calcularTotales,
-} from '../services/mockData'
+import { TORRE } from '../config/torre'
+import { useFinanzas } from '../hooks/useFinanzas'
+import { useAvisos } from '../hooks/useAvisos'
+import { useDocumentos } from '../hooks/useDocumentos'
 import { formatMoney, formatFechaLarga } from '../utils/format'
 import {
   IconoDolar,
@@ -35,12 +30,12 @@ function cuentaEnmascarada(cuenta = '') {
 }
 
 export default function Inicio() {
-  const fondo = getFondoComun()
-  const { ingresos, egresos } = calcularTotales()
-  const morosas = getUnidadesMorosas()
-  const asamblea = getAcuerdoReciente()
-  const documentos = getDocumentos().slice(0, 4)
-  const avisos = getAvisos().slice(0, 3)
+  const { fondo, ingresos, egresos, morosas } = useFinanzas()
+  const { avisos: todosLosAvisos } = useAvisos()
+  const { documentos: todosLosDocs, asamblea } = useDocumentos()
+
+  const documentos = (todosLosDocs || []).slice(0, 4)
+  const avisos = (todosLosAvisos || []).slice(0, 3)
 
   return (
     <div className="space-y-6 pb-8">
@@ -80,10 +75,10 @@ export default function Inicio() {
                   Dinero en la cuenta
                 </p>
                 <p className="text-3xl font-extrabold leading-tight text-accent-600">
-                  {formatMoney(fondo.saldoTotal)}
+                  {formatMoney(fondo?.saldoTotal)}
                 </p>
                 <p className="mt-1 font-mono text-sm font-semibold text-navy-800">
-                  En cuenta {cuentaEnmascarada(fondo.cuentaBancaria)}
+                  En cuenta {cuentaEnmascarada(fondo?.cuentaBancaria)}
                 </p>
               </div>
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-2xl">
@@ -98,13 +93,13 @@ export default function Inicio() {
           <StatCard
             label="Ingresos (mes)"
             value={formatMoney(ingresos)}
-            sub={fondo.mesActual}
+            sub={fondo?.mesActual}
             icon={<IconoDolar />}
           />
           <StatCard
             label="Gastos (mes)"
             value={formatMoney(egresos)}
-            sub={fondo.mesActual}
+            sub={fondo?.mesActual}
             variant="danger"
             icon={<IconoDolar />}
           />

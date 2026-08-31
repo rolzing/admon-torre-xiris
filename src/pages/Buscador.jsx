@@ -1,18 +1,35 @@
 // Buscador simple (módulo 8): encuentra por palabra clave dentro de
 // avisos, documentos y conceptos de gasto.
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Card from '../components/Card'
 import SearchBar from '../components/SearchBar'
 import PageHeader from '../components/PageHeader'
-import { buscar } from '../services/mockData'
+import { buscar } from '../services/buscar.service'
 import { formatMoney, formatFechaLarga } from '../utils/format'
 import { IconoDocumento, IconoAviso, IconoDolar } from '../components/Icons'
 
 export default function Buscador() {
   const [query, setQuery] = useState('')
-  const { avisos, documentos, gastos } = buscar(query)
+  const [resultados, setResultados] = useState({ avisos: [], documentos: [], gastos: [] })
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    ;(async () => {
+      const res = await buscar(query)
+      if (!active) return
+      setResultados(res)
+      setLoading(false)
+    })()
+    return () => {
+      active = false
+    }
+  }, [query])
+
+  const { avisos, documentos, gastos } = resultados
   const total = avisos.length + documentos.length + gastos.length
 
   return (

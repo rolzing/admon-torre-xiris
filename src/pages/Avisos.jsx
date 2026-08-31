@@ -4,12 +4,12 @@
 import Card from '../components/Card'
 import Badge from '../components/Badge'
 import PageHeader from '../components/PageHeader'
-import { getAvisos } from '../services/mockData'
+import { useAvisos } from '../hooks/useAvisos'
 import { formatFechaLarga } from '../utils/format'
 import { IconoAviso } from '../components/Icons'
 
 export default function Avisos() {
-  const avisos = getAvisos()
+  const { avisos } = useAvisos()
 
   return (
     <div className="space-y-6">

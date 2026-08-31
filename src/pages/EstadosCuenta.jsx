@@ -14,7 +14,7 @@ import { IconoRecibo, IconoDescarga } from '../components/Icons'
 
 export default function EstadosCuenta() {
   const { usuario } = useAuth()
-  const estado = useEstadoCuenta(usuario?.id)
+  const { estado } = useEstadoCuenta(usuario?.id)
   const [filtro, setFiltro] = useState('')
 
   const historial = estado?.historial || []
@@ -112,7 +112,7 @@ export default function EstadosCuenta() {
 }
 
 // Descarga de recibo (simulado): genera un PDF descriptivo local
-// y lo descarga. En producción apunta a Firebase Storage.
+// y lo descarga. En producción apunta a Appwrite Storage.
 function descargarRecibo(estado, nombreArchivo) {
   const mes = estado.historial.find((h) => h.recibo === nombreArchivo)
   const contenido = `
@@ -125,7 +125,7 @@ Monto: ${formatMoney(mes?.cuota || 0)}
 Fecha de pago: ${mes?.fechaPago || ''}
 
 *Documento de demostración. En producción se genera un PDF real o
-se descarga desde Firebase Storage. La integración de Google Sheets
+se descarga desde Appwrite Storage. La integración de Google Sheets
 poblaria este recibo con datos reales.*
   `.trim()
 

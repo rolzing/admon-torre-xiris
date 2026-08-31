@@ -6,7 +6,7 @@ import Card from '../components/Card'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
 import PageHeader from '../components/PageHeader'
-import { getDocumentos, getAcuerdoReciente } from '../services/mockData'
+import { useDocumentos } from '../hooks/useDocumentos'
 import { formatFecha } from '../utils/format'
 import { IconoDocumento, IconoDescarga, IconoAviso } from '../components/Icons'
 
@@ -20,8 +20,7 @@ const tipoTone = (t) => {
 }
 
 export default function Documentos() {
-  const documentos = getDocumentos()
-  const asamblea = getAcuerdoReciente()
+  const { documentos, asamblea } = useDocumentos()
 
   return (
     <div className="space-y-6">
@@ -104,6 +103,6 @@ export default function Documentos() {
 
 function abrirDocumento(url) {
   // Placeholder de descarga. En producción apunta a archivos reales
-  // en Firebase Storage (getDownloadURL) o a PDFs servidos por Vercel.
-  alert(`Descarga (demo): ${url}\n\nEn producción este archivo vendría de Firebase Storage.`)
+  // en Appwrite Storage (getFilePreview / getFileDownload).
+  alert(`Descarga (demo): ${url}\n\nEn producción este archivo vendría de Appwrite Storage.`)
 }

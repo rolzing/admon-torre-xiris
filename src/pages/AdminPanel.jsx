@@ -1,7 +1,7 @@
 // Panel de Administrador (módulo 9). Visible solo con rol admin.
 // Formularios para: avisos, documentos, gastos y estados de cuenta.
-// En este demo los cambios se mantienen en memoria del componente;
-// en producción se escribirían en Firestore (poblada desde Google Sheets).
+// En este demo las escrituras se mantienen en memoria (mock); en
+// producción registrarían en Appwrite Database + Storage.
 
 import { useState } from 'react'
 import Card from '../components/Card'
@@ -9,58 +9,96 @@ import Button from '../components/Button'
 import Badge from '../components/Badge'
 import Table from '../components/Table'
 import PageHeader from '../components/PageHeader'
-import {
-  getAvisos,
-  getGastosMes,
-  getUnidades,
-  getEstadoCuentaPorUnidad,
-  TORRE,
-} from '../services/mockData'
+import MonthPicker from '../components/MonthPicker'
+import { TORRE } from '../config/torre'
+import { useAvisos } from '../hooks/useAvisos'
+import { useFinanzas } from '../hooks/useFinanzas'
+import { useUnidades } from '../hooks/useEstadosCuenta'
+import { crearAviso } from '../services/avisos.service'
+import { crearGasto } from '../services/finanzas.service'
+import { crearDocumento } from '../services/documentos.service'
+import { subirArchivo } from '../services/storage.service'
 import { formatMoney } from '../utils/format'
 
-const AVISO_VACIO = { titulo: '', fecha: new Date().toISOString().slice(0, 10), importante: false, contenido: '' }
-const GASTO_VACIO = { concepto: '', categoria: 'Mantenimiento', monto: '', fecha: new Date().toISOString().slice(0, 10) }
+const AVISO_VACIO = { titulo: '', fecha: new Date().toISOString().slice(0, 10), importante: false, contenido: '', imagenes: [] }
+const GASTO_VACIO = { concepto: '', categoria: 'Mantenimiento', monto: '', fecha: new Date().toISOString().slice(0, 10), factura: null }
+const DOC_VACIO = { tipo: 'Acta de Asamblea', titulo: '', mes: '', archivo: null }
 
 export default function AdminPanel() {
+  const { avisos } = useAvisos()
+  const { gastos } = useFinanzas()
+  const { unidades } = useUnidades()
+
   const [aviso, setAviso] = useState(AVISO_VACIO)
   const [gasto, setGasto] = useState(GASTO_VACIO)
+  const [doc, setDoc] = useState(DOC_VACIO)
   const [avisoMsg, setAvisoMsg] = useState('')
   const [gastoMsg, setGastoMsg] = useState('')
   const [docMsg, setDocMsg] = useState('')
-  const unidades = getUnidades()
 
-  const avisos = getAvisos()
-  const gastos = getGastosMes()
+  const unidadesMorosas = (unidades || []).filter((u) => (u.adeudo || 0) > 0)
 
-  const handleAviso = (e) => {
+  const agregarImagenAviso = (file) => {
+    setAviso((prev) => {
+      if (prev.imagenes.length >= 2) return prev
+      const preview = URL.createObjectURL(file)
+      return { ...prev, imagenes: [...prev.imagenes, { file, preview }] }
+    })
+  }
+
+  const quitarImagenAviso = (idx) => {
+    setAviso((prev) => {
+      const imagenes = prev.imagenes.filter((_, i) => i !== idx)
+      return { ...prev, imagenes }
+    })
+  }
+
+  const handleAviso = async (e) => {
     e.preventDefault()
+    const fileIds = []
+    for (const img of aviso.imagenes) {
+      const uploaded = await subirArchivo(img.file, img.file.name, img.file.type)
+      fileIds.push(uploaded.fileId)
+    }
+    await crearAviso({ ...aviso, imagenes: fileIds })
+    aviso.imagenes.forEach((img) => URL.revokeObjectURL(img.preview))
     setAvisoMsg(`¡Aviso publicado! (demo): «${aviso.titulo}»`)
     setAviso(AVISO_VACIO)
   }
 
-  const handleGasto = (e) => {
+  const handleGasto = async (e) => {
     e.preventDefault()
+    let facturaId = null
+    if (gasto.factura) {
+      const uploaded = await subirArchivo(gasto.factura, gasto.factura.name, gasto.factura.type)
+      facturaId = uploaded.fileId
+    }
+    await crearGasto({ ...gasto, monto: Number(gasto.monto), facturaId })
     setGastoMsg(`¡Gasto registrado! (demo): «${gasto.concepto}» por ${formatMoney(Number(gasto.monto))}`)
     setGasto(GASTO_VACIO)
   }
 
-  const handleDoc = (e) => {
+  const handleDoc = async (e) => {
     e.preventDefault()
-    setDocMsg('Documento subido (demo). En producción iría a Firebase Storage.')
+    const base = {
+      titulo: doc.titulo,
+      tipo: doc.tipo,
+      mes: doc.mes || null,
+      fecha: new Date().toISOString().slice(0, 10),
+    }
+    if (doc.archivo) {
+      const uploaded = await subirArchivo(doc.archivo, doc.archivo.name, doc.archivo.type)
+      await crearDocumento({ ...base, fileId: uploaded.fileId })
+    } else {
+      await crearDocumento({ ...base })
+    }
+    setDocMsg('Documento subido (demo). En producción se guardará en Appwrite Storage + Database.')
+    setDoc(DOC_VACIO)
   }
 
   const cambiarPago = (unidadId, periodo) => {
-    // Demo: solo muestra un mensaje; no muta datos reales.
-    alert(`(Demo) Se marcaría como pagado el periodo ${periodo} de la unidad ${unidadId}. En producción se escribirá en Firestore / Sheets.`)
+    alert(`(Demo) Se marcaría como pagado el periodo ${periodo} de la unidad ${unidadId}. En producción se escribirá en Appwrite.`)
   }
-
-  const unidadesMorosas = unidades
-    .map((u) => {
-      const est = getEstadoCuentaPorUnidad(u.id)
-      const adeudo = (est?.historial || []).reduce((s, h) => s + h.adeudo, 0)
-      return { ...u, adeudo }
-    })
-    .filter((u) => u.adeudo > 0)
 
   return (
     <div className="space-y-6">
@@ -69,7 +107,7 @@ export default function AdminPanel() {
         description="Gestiona avisos, documentos, gastos y estados de cuenta."
       />
 
-      <NoticeSheets />
+      <NoticeBackend />
 
       {/* Avisos */}
       <Card>
@@ -102,6 +140,51 @@ export default function AdminPanel() {
             />
             Marcar como importante
           </label>
+
+          <div>
+            <span className="mb-1 block text-sm font-medium text-slate-600">
+              Imágenes (máximo 2)
+            </span>
+            <div className="flex flex-wrap items-center gap-3">
+              {aviso.imagenes.map((img, i) => (
+                <div key={i} className="relative">
+                  <img
+                    src={img.preview}
+                    alt={`aviso-${i + 1}`}
+                    className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => quitarImagenAviso(i)}
+                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-xs text-white shadow"
+                    title="Quitar imagen"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+              {aviso.imagenes.length < 2 && (
+                <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 text-slate-400 hover:border-accent-400 hover:text-accent-500">
+                  <span className="text-xl">+</span>
+                  <span className="text-[10px]">Foto</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0]
+                      if (file) agregarImagenAviso(file)
+                      e.target.value = ''
+                    }}
+                  />
+                </label>
+              )}
+            </div>
+            {aviso.imagenes.length >= 2 && (
+              <p className="mt-1 text-xs text-slate-400">Máximo 2 fotos.</p>
+            )}
+          </div>
+
           <Button type="submit">Publicar aviso</Button>
           {avisoMsg && <p className="text-sm text-accent-600">{avisoMsg}</p>}
         </form>
@@ -112,23 +195,42 @@ export default function AdminPanel() {
         <h3 className="mb-3 font-bold text-navy-900">Subir documento</h3>
         <form onSubmit={handleDoc} className="space-y-3">
           <Field label="Tipo de documento">
-            <select className={inputCls}>
+            <select
+              className={inputCls}
+              value={doc.tipo}
+              onChange={(e) => setDoc({ ...doc, tipo: e.target.value })}
+            >
               <option>Acta de Asamblea</option>
               <option>Reglamento</option>
               <option>Estado Financiero</option>
+              <option>Estado de Cuenta</option>
               <option>Otro</option>
             </select>
           </Field>
+
+          {doc.tipo === 'Estado de Cuenta' && (
+            <Field label="Mes del estado de cuenta">
+              <MonthPicker value={doc.mes} onChange={(mes) => setDoc({ ...doc, mes })} />
+            </Field>
+          )}
+
           <Field label="Título">
-            <input className={inputCls} placeholder="Nombre del documento" required />
+            <input
+              className={inputCls}
+              value={doc.titulo}
+              onChange={(e) => setDoc({ ...doc, titulo: e.target.value })}
+              placeholder={
+                doc.tipo === 'Estado de Cuenta' ? 'Ej. Estado de cuenta · Agosto 2026' : 'Nombre del documento'
+              }
+            />
           </Field>
           <Field label="Archivo">
-            <input type="file" className={inputCls} />
+            <input type="file" className={inputCls} onChange={(e) => setDoc({ ...doc, archivo: e.target.files?.[0] || null })} />
           </Field>
           <Button type="submit">Subir documento</Button>
           {docMsg && <p className="text-sm text-accent-600">{docMsg}</p>}
           <p className="text-xs text-slate-400">
-            Demo sin carga real de archivos. En producción se usa Firebase Storage.
+            Demo sin carga real de archivos. En producción se usa Appwrite Storage.
           </p>
         </form>
       </Card>
@@ -181,6 +283,37 @@ export default function AdminPanel() {
             />
           </Field>
           <div className="sm:col-span-2 lg:col-span-4">
+            <span className="mb-1 block text-sm font-medium text-slate-600">
+              Factura (archivo)
+            </span>
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-500 hover:border-accent-400 hover:text-accent-600">
+              <span className="text-lg">📎</span>
+              {gasto.factura ? (
+                <span className="font-medium text-navy-800">{gasto.factura.name}</span>
+              ) : (
+                <span>Adjuntar factura (PDF o imagen)</span>
+              )}
+              <input
+                type="file"
+                accept=".pdf,image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null
+                  setGasto((prev) => ({ ...prev, factura: file }))
+                }}
+              />
+            </label>
+            {gasto.factura && (
+              <button
+                type="button"
+                onClick={() => setGasto((prev) => ({ ...prev, factura: null }))}
+                className="mt-1 text-xs text-red-600 hover:underline"
+              >
+                Quitar factura
+              </button>
+            )}
+          </div>
+          <div className="sm:col-span-2 lg:col-span-4">
             <Button type="submit">Registrar gasto</Button>
             {gastoMsg && <p className="mt-2 text-sm text-accent-600">{gastoMsg}</p>}
           </div>
@@ -200,16 +333,15 @@ export default function AdminPanel() {
       <Card>
         <h3 className="mb-3 font-bold text-navy-900">Estados de cuenta por unidad</h3>
         <div className="space-y-3">
-          {unidades.map((u) => {
-            const est = getEstadoCuentaPorUnidad(u.id)
-            const pend = (est?.historial || []).filter((h) => !h.pagado)
+          {(unidades || []).map((u) => {
+            const pend = (u.pendientes || []).filter(Boolean)
             return (
               <div key={u.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-3">
                 <div>
                   <p className="font-semibold text-navy-800">Unidad {u.numero} · {u.propietario}</p>
                   <p className="text-xs text-slate-500">
                     {pend.length > 0
-                      ? `Pendientes: ${pend.map((p) => p.mes).join(', ')}`
+                      ? `Pendientes: ${pend.join(', ')}`
                       : 'Al corriente'}
                   </p>
                 </div>
@@ -217,7 +349,7 @@ export default function AdminPanel() {
                   <Button
                     variant="secondary"
                     className="px-3 py-1.5 text-xs"
-                    onClick={() => cambiarPago(u.numero, pend[0].periodo)}
+                    onClick={() => cambiarPago(u.numero, pend[0])}
                   >
                     Marcar pago (demo)
                   </Button>
@@ -247,15 +379,14 @@ export default function AdminPanel() {
   )
 }
 
-function NoticeSheets() {
+function NoticeBackend() {
   return (
     <Card className="border-dashed border-2 border-slate-200 bg-slate-50">
       <p className="text-sm text-slate-600">
         <span className="font-semibold text-navy-800">Nota:</span> En este demo los datos son de
-        ejemplo. En producción, esta información se alimentaría automáticamente desde{' '}
-        <span className="font-semibold">Google Sheets</span> mediante una sincronización hacia
-        Firebase ({TORRE.administrador} mantendría la hoja de cálculo y el portal reflejaría los
-        cambios).
+        ejemplo. En producción, esta información se almacenaría en <span className="font-semibold">Appwrite</span>:
+        la base de datos (Database) para avisos, gastos y documentos, y Storage para los archivos.
+        El panel de {TORRE.administrador} reflejaría los cambios al guardar.
       </p>
     </Card>
   )

@@ -1,12 +1,12 @@
-// Página de inicio de sesión. En producción usa Firebase Auth
-// (signInWithEmailAndPassword). En demo valida contra mockData.
+// Página de inicio de sesión. En producción usa Appwrite Auth
+// (createEmailPasswordSession). En demo valida contra mockData.
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import Button from '../components/Button'
 import { IconoEdificio } from '../components/Icons'
-import { TORRE } from '../services/mockData'
+import { TORRE } from '../config/torre'
 
 const DEMO_CREDENTIALS = [
   { rol: 'Administrador', email: 'encargado@mirador.mx', password: 'admin123' },
