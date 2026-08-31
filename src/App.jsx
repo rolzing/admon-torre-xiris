@@ -3,6 +3,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import Inicio from './pages/Inicio'
 import DashboardGeneral from './pages/DashboardGeneral'
 import DashboardPersonal from './pages/DashboardPersonal'
 import Finanzas from './pages/Finanzas'
@@ -29,12 +30,14 @@ function RequireAdmin({ children }) {
 export default function App() {
   const { usuario } = useAuth()
 
-  // Si no hay sesión, solo se permite el login.
+  // Sin sesión: solo se permite la página pública (Inicio) y el Login.
   if (!usuario) {
     return (
       <Routes>
+        <Route path="/" element={<Inicio />} />
+        <Route path="/inicio" element={<Inicio />} />
         <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     )
   }
@@ -44,6 +47,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/" element={<Inicio />} />
+      <Route path="/inicio" element={<Inicio />} />
 
       {/* Panel principal: general + personal */}
       <Route
