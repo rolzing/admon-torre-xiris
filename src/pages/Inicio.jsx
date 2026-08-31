@@ -63,11 +63,6 @@ export default function Inicio() {
           <Link to="/login">
             <Button className="px-4 py-2 text-sm">Iniciar sesión</Button>
           </Link>
-          <Link to="/avisos" className="inline-block">
-            <Button variant="secondary" className="px-4 py-2 text-sm text-navy-800">
-              Ver avisos
-            </Button>
-          </Link>
         </div>
       </section>
 
