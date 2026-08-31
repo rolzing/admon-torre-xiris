@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Portal informativo para administración de un condominio/residencial. Reemplaza el caos del chat de WhatsApp con información clara y consultable.",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
