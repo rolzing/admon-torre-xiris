@@ -26,12 +26,12 @@ export const TORRE = {
 
 // ---------- Saldo del fondo común de la torre ----------
 export const fondoComun = {
-  saldoTotal: 128650.0,
+  saldoTotal: 123123.0,
   mesActual: 'Agosto 2026',
   // Cuenta bancaria del fondo común, mostrada de forma enmascarada
-  // (sólo los últimos 4 dígitos) para transparencia sin exponer datos
-  // sensibles completos. Se publica en la página de inicio.
-  cuentaBancaria: '0104 9223 8812 0123',
+  // (sólo los últimos 4 dígitos, ej. ***1233) para transparencia sin
+  // exponer datos sensibles completos. Se publica en la página de inicio.
+  cuentaBancaria: '0104 9223 2345 1233',
   // saldoTotal se puede recalcular a partir de movimientos si se desea,
   // pero lo mantenemos como dato "oficial" proveniente de Sheets/producción.
 }

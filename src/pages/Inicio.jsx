@@ -28,10 +28,10 @@ import {
   IconoUsuario,
 } from '../components/Icons'
 
-// Enmascara la cuenta: muestra solo los últimos 4 dígitos.
+// Enmascara la cuenta: muestra solo los últimos 4 dígitos (ej. ***1233).
 function cuentaEnmascarada(cuenta = '') {
   const ultimos4 = cuenta.slice(-4)
-  return `•••• ${ultimos4}`
+  return `***${ultimos4}`
 }
 
 export default function Inicio() {
@@ -77,13 +77,29 @@ export default function Inicio() {
           Fondo común
         </h2>
         <div className="grid grid-cols-2 gap-4">
-          <StatCard
-            label="Dinero en la cuenta"
-            value={formatMoney(fondo.saldoTotal)}
-            variant="accent"
-            icon={<IconoDolar />}
-            className="col-span-2"
-          />
+          {/* Dinero en la cuenta + cuenta bancaria enmascarada = un mismo dato */}
+          <Card className="col-span-2" hover>
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                  Dinero en la cuenta
+                </p>
+                <p className="text-3xl font-extrabold leading-tight text-accent-600">
+                  {formatMoney(fondo.saldoTotal)}
+                </p>
+                <p className="mt-1 font-mono text-sm font-semibold text-navy-800">
+                  En cuenta {cuentaEnmascarada(fondo.cuentaBancaria)}
+                </p>
+              </div>
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-2xl">
+                <IconoDolar />
+              </div>
+            </div>
+            <p className="mt-3 text-xs text-slate-400">
+              La cuenta se muestra enmascarada (solo últimos 4 dígitos) por transparencia; los
+              dígitos completos los ve la administración.
+            </p>
+          </Card>
           <StatCard
             label="Ingresos (mes)"
             value={formatMoney(ingresos)}
@@ -98,23 +114,6 @@ export default function Inicio() {
             icon={<IconoDolar />}
           />
         </div>
-        <Card className="mt-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Cuenta bancaria del fondo
-              </p>
-              <p className="mt-1 font-mono text-lg font-bold text-navy-900">
-                {cuentaEnmascarada(fondo.cuentaBancaria)}
-              </p>
-            </div>
-            <Badge tone="neutral">Solo últimos 4 dígitos</Badge>
-          </div>
-          <p className="mt-2 text-xs text-slate-400">
-            Dato público para transparencia; los dígitos completos se muestran solo a la
-            administración.
-          </p>
-        </Card>
       </section>
 
       {/* Deudores */}
