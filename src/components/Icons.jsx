@@ -128,9 +128,9 @@ export function IconoAlert() {
   )
 }
 
-export function IconoChevron() {
+export function IconoChevron({ className = '' }) {
   return (
-    <svg {...base} width="1em" height="1em">
+    <svg {...base} width="1em" height="1em" className={className}>
       <polyline points="9 18 15 12 9 6" />
     </svg>
   )

@@ -17,6 +17,7 @@ import {
   IconoDocumento,
   IconoGrafica,
   IconoEdificio,
+  IconoChevron,
 } from '../components/Icons'
 
 export default function DashboardGeneral() {
@@ -85,15 +86,19 @@ export default function DashboardGeneral() {
         </h2>
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {quickLinks.map((q) => (
-            <Link key={q.to} to={q.to}>
-              <Card className="h-full transition-shadow hover:shadow-card-hover" hover>
-                <div className="flex flex-col gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-xl">
+            <Link key={q.to} to={q.to} className="group block cursor-pointer">
+              <Card className="h-full transition-all duration-200 hover:-translate-y-0.5 hover:border-accent-300 hover:shadow-card-hover" hover>
+                <div className="flex h-full flex-col gap-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-xl transition-colors group-hover:bg-accent-50 group-hover:text-accent-600">
                     {q.icon()}
                   </div>
                   <div>
                     <p className="font-bold text-navy-900">{q.label}</p>
                     <p className="text-sm text-slate-500">{q.desc}</p>
+                  </div>
+                  <div className="mt-auto flex items-center gap-1 pt-1 text-sm font-semibold text-accent-600">
+                    Ver más
+                    <IconoChevron className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </div>
               </Card>

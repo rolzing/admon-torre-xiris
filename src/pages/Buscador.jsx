@@ -8,7 +8,7 @@ import SearchBar from '../components/SearchBar'
 import PageHeader from '../components/PageHeader'
 import { buscar } from '../services/buscar.service'
 import { formatMoney, formatFechaLarga } from '../utils/format'
-import { IconoDocumento, IconoAviso, IconoDolar } from '../components/Icons'
+import { IconoDocumento, IconoAviso, IconoDolar, IconoChevron } from '../components/Icons'
 
 export default function Buscador() {
   const [query, setQuery] = useState('')
@@ -118,8 +118,9 @@ function ResultSection({ title, icon, children }) {
 
 function Row({ children }) {
   return (
-    <div className="flex items-center justify-between gap-3 px-5 py-3 transition hover:bg-slate-50">
+    <div className="group flex cursor-pointer items-center justify-between gap-3 px-5 py-3 transition hover:bg-slate-50">
       {children}
+      <IconoChevron className="h-4 w-4 shrink-0 text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-accent-500" />
     </div>
   )
 }
