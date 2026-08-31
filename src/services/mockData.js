@@ -19,7 +19,7 @@
 
 // ---------- Identidad de la torre ----------
 export const TORRE = {
-  nombre: 'Torre Residencial Mirador',
+  nombre: 'Torre Xiris',
   direccion: 'Av. Principal 123, Col. Centro',
   administrador: 'Sra. Laura Méndez',
 }

@@ -117,7 +117,7 @@ function descargarRecibo(estado, nombreArchivo) {
   const mes = estado.historial.find((h) => h.recibo === nombreArchivo)
   const contenido = `
 RECIBO DE PAGO DE CUOTA — ${mes?.mes || ''}
-Torre Residencial Mirador
+Torre Xiris
 Unidad: ${estado.numero}
 Propietario: ${estado.propietario}
 Concepto: Cuota mensual
