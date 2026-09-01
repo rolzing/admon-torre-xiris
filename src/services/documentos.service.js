@@ -8,8 +8,7 @@
 //  Cada función tiene UNA responsabilidad.
 // ============================================================
 
-import { databases, APPWRITE_CONFIG } from '../config/appwrite'
-import { APPWRITE_CONFIGURED } from '../config/appwrite'
+import { APPWRITE_CONFIG, APPWRITE_CONFIGURED, callFunction } from '../config/appwrite'
 import {
   getDocumentos as getDocumentosMock,
   getAcuerdoReciente as getAsambleaMock,
@@ -18,17 +17,15 @@ import {
 /** Lista de documentos del repositorio. */
 export async function listDocumentos() {
   if (!APPWRITE_CONFIGURED) return getDocumentosMock()
-  // const res = await databases.listDocuments(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionDocumentos, [Query.orderDesc('fecha')])
-  // return res.documents.map(mapper)
-  return getDocumentosMock()
+  const res = await callFunction('listar_documentos')
+  return res.documentos
 }
 
 /** Devuelve la asamblea más reciente, con resumen de acuerdos. */
 export async function getAsambleaReciente() {
   if (!APPWRITE_CONFIGURED) return getAsambleaMock()
-  // Listar documentos tipo 'Acta de Asamblea' y tomar el más reciente.
-  return getAsambleaMock()
+  const res = await callFunction('get_asamblea_reciente')
+  return res.asamblea
 }
 
 /**
@@ -40,10 +37,9 @@ export async function crearDocumento({ titulo, tipo, fecha, descripcion, fileId,
   if (!APPWRITE_CONFIGURED) {
     return { id: `d-${Date.now()}`, titulo, tipo, fecha, descripcion, mes, url: `/docs/${fileId}` }
   }
-  // const res = await databases.createDocument(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionDocumentos, ID.unique(),
-  //   { titulo, tipo, fecha, descripcion, fileId, mes })
-  return { id: `d-${Date.now()}`, titulo, tipo, fecha, descripcion, mes, url: `/docs/${fileId}` }
+  // Operación administrativa: delegada a la Appwrite Function (servidor).
+  const res = await callFunction('crear_documento', { titulo, tipo, fecha, descripcion, fileId, mes })
+  return { id: res.id, titulo, tipo, fecha, descripcion, mes, url: `/docs/${fileId}` }
 }
 
 export { APPWRITE_CONFIG }

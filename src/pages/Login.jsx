@@ -10,7 +10,7 @@ import { TORRE } from '../config/torre'
 
 const DEMO_CREDENTIALS = [
   { rol: 'Administrador', email: 'encargado@mirador.mx', password: 'admin123' },
-  { rol: 'Inquilino', email: 'unidad201@mirador.mx', password: 'demo123' },
+  { rol: 'Inquilino', email: 'unidad201@mirador.mx', password: 'Test123456' },
 ]
 
 export default function Login() {

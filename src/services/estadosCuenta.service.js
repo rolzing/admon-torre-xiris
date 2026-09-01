@@ -7,8 +7,7 @@
 //  Cada función tiene UNA responsabilidad.
 // ============================================================
 
-import { databases, APPWRITE_CONFIG } from '../config/appwrite'
-import { APPWRITE_CONFIGURED } from '../config/appwrite'
+import { APPWRITE_CONFIG, APPWRITE_CONFIGURED, callFunction } from '../config/appwrite'
 import {
   getEstadoCuentaPorUnidad as getEstadoMock,
   getUnidades as getUnidadesMock,
@@ -18,10 +17,8 @@ import {
 /** Lista de unidades (sin datos sensibles como contraseñas). */
 export async function listUnidades() {
   if (!APPWRITE_CONFIGURED) return getUnidadesMock()
-  // const res = await databases.listDocuments(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionUnidades)
-  // return res.documents.map(mapper)
-  return getUnidadesMock()
+  const res = await callFunction('listar_unidades')
+  return res.unidades
 }
 
 /**
@@ -30,16 +27,17 @@ export async function listUnidades() {
  */
 export async function listUnidadesConEstado() {
   if (!APPWRITE_CONFIGURED) return getUnidadesConEstadoMock()
-  // Combinar unidades + estados de cuenta desde Appwrite Database.
-  return getUnidadesConEstadoMock()
+  const res = await callFunction('listar_unidades_estado')
+  return res.unidades
 }
 
 /** Estado de cuenta completo de una unidad (historial mensual). */
 export async function getEstadoCuenta(unidadId) {
   if (!APPWRITE_CONFIGURED) return getEstadoMock(unidadId)
-  // const res = await databases.listDocuments(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionEstadosCuenta, [Query.equal('unidadId', unidadId)])
-  return getEstadoMock(unidadId)
+  // En production unidadId es el número de unidad; la function
+  // resuelve además los datos de la unidad y el historial.
+  const res = await callFunction('get_estado_cuenta', { numero: unidadId })
+  return res.estado
 }
 
 export { APPWRITE_CONFIG }

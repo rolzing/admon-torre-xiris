@@ -7,8 +7,7 @@
 //  Cada función tiene UNA responsabilidad.
 // ============================================================
 
-import { databases } from '../config/appwrite'
-import { APPWRITE_CONFIGURED } from '../config/appwrite'
+import { APPWRITE_CONFIGURED, callFunction } from '../config/appwrite'
 import {
   getFondoComun as getFondoMock,
   getGastosMes as getGastosMock,
@@ -20,30 +19,31 @@ import {
 /** Datos generales del fondo común (saldo, cuenta, mes). */
 export async function getFondoComun() {
   if (!APPWRITE_CONFIGURED) return getFondoMock()
-  // TODO(producción):
-  //   const doc = await databases.getDocument(databaseId, collectionFondo, DOC_ID)
-  //   return { saldoTotal: doc.saldo, cuentaBancaria: doc.cuenta, mesActual: doc.mes }
-  return getFondoMock()
+  const res = await callFunction('get_fondo')
+  return res.fondo
 }
 
-/** Lista de gastos (egresos) del mes. */
+/** Lista de gastos (egresos). */
 export async function getGastosMes() {
   if (!APPWRITE_CONFIGURED) return getGastosMock()
-  // const res = await databases.listDocuments(DB, COLLECTION_GASTOS, [Query.equal('mes', MES)])
-  // return res.documents.map(mapper)
-  return getGastosMock()
+  const res = await callFunction('listar_gastos')
+  return res.gastos
 }
 
-/** Lista de pagos (cuotas recibidas) del mes. */
+/** Lista de pagos (cuotas recibidas). */
 export async function getPagosMes() {
   if (!APPWRITE_CONFIGURED) return getPagosMock()
-  return getPagosMock()
+  const res = await callFunction('listar_pagos')
+  return res.pagos
 }
 
 /** Lista de unidades con adeudo: { numero, adeudo }. */
 export async function getUnidadesMorosas() {
   if (!APPWRITE_CONFIGURED) return getMorosasMock()
-  return getMorosasMock()
+  const res = await callFunction('listar_unidades_estado')
+  return res.unidades
+    .map((u) => ({ numero: u.numero, adeudo: u.adeudo }))
+    .filter((u) => u.adeudo > 0)
 }
 
 /** Totales calculados: ingresos, egresos, saldo, saldoOperativo. */
@@ -69,8 +69,9 @@ export async function crearGasto({ concepto, categoria, monto, fecha, facturaId 
   if (!APPWRITE_CONFIGURED) {
     return { id: `g-${Date.now()}`, concepto, categoria, monto: Number(monto), fecha, facturaId }
   }
-  // const res = await databases.createDocument(databaseId, collectionGastos, ID.unique(), {
-  //   concepto, categoria, monto: Number(monto), fecha, facturaId,
-  // })
-  return { id: `g-${Date.now()}`, concepto, categoria, monto: Number(monto), fecha, facturaId }
+  // Operación administrativa: delegada a la Appwrite Function (servidor).
+  const res = await callFunction('crear_gasto', {
+    concepto, categoria, monto: Number(monto), fecha, facturaId,
+  })
+  return { id: res.id, concepto, categoria, monto: Number(monto), fecha, facturaId }
 }

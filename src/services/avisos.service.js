@@ -6,19 +6,16 @@
 //  Cada función tiene UNA responsabilidad.
 // ============================================================
 
-import { databases, APPWRITE_CONFIG } from '../config/appwrite'
-import { APPWRITE_CONFIGURED } from '../config/appwrite'
+import { APPWRITE_CONFIG, APPWRITE_CONFIGURED, callFunction } from '../config/appwrite'
 import { getAvisos as getAvisosMock } from './mockData'
 
 /** Lista de avisos, del más reciente al más antiguo. */
 export async function listAvisos() {
   if (!APPWRITE_CONFIGURED) return getAvisosMock()
-  // const res = await databases.listDocuments(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionAvisos, [Query.orderDesc('fecha')])
-  // return res.documents.map(({ $id, titulo, fecha, importante, contenido, imagenes }) => ({
-  //   id: $id, titulo, fecha, importante, contenido, imagenes: imagenes || [],
-  // }))
-  return getAvisosMock()
+  // En producción toda la lectura pasa por la Appwrite Function (el SDK
+  // del navegador no accede a TablesDB). La function posee la API key.
+  const res = await callFunction('listar_avisos')
+  return res.avisos
 }
 
 /** Publica un nuevo aviso (panel admin). */
@@ -26,10 +23,10 @@ export async function crearAviso({ titulo, contenido, fecha, importante, imagene
   if (!APPWRITE_CONFIGURED) {
     return { id: `a-${Date.now()}`, titulo, contenido, fecha, importante: Boolean(importante), imagenes }
   }
-  // const res = await databases.createDocument(APPWRITE_CONFIG.databaseId,
-  //   APPWRITE_CONFIG.collectionAvisos, ID.unique(),
-  //   { titulo, contenido, fecha, importante, imagenes })
-  return { id: `a-${Date.now()}`, titulo, contenido, fecha, importante: Boolean(importante), imagenes }
+  // Operación administrativa: se delega a la Appwrite Function (servidor),
+  // que posee la API key con permisos de escritura. El frontend no la ve.
+  const res = await callFunction('crear_aviso', { titulo, contenido, fecha, importante, imagenes })
+  return { id: res.id, titulo, contenido, fecha, importante: Boolean(importante), imagenes }
 }
 
 export { APPWRITE_CONFIG }

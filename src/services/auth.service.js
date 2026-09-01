@@ -10,7 +10,7 @@
 //  un campo 'rol'). En este demo el rol se deriva de mockData.
 // ============================================================
 
-import { account } from '../config/appwrite'
+import { account, callFunction } from '../config/appwrite'
 import { APPWRITE_CONFIGURED } from '../config/appwrite'
 import { USER_SESSION_KEY } from '../utils/storage'
 import { loginDemo } from './mockData'
@@ -90,14 +90,16 @@ export async function signOut() {
 }
 
 /**
- * NOTA: en producción el rol y número de unidad se leen desde la
- * colección 'unidades' (Appwrite Database). Aquí dejamos el punto
- * de integración; en modo demo se resuelve desde mockData.
+ * Lee rol/número de unidad de un usuario de Appwrite desde la tabla
+ * 'usuarios' (via la function de administración). Devuelve null si el
+ * usuario no tiene registro (p.ej. aún no se le asignó rol).
  */
 export async function fetchUserRole(userId) {
   if (!APPWRITE_CONFIGURED) return null
-  // TODO(producción):
-  //   const doc = await databases.getDocument(databaseId, collectionUnidades, userId)
-  //   return { rol: doc.rol, numero: doc.numero, propietario: doc.propietario }
-  return null
+  try {
+    const { usuario } = await callFunction('get_usuario_rol', { userId })
+    return usuario
+  } catch {
+    return null
+  }
 }

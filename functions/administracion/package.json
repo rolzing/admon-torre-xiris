@@ -1,0 +1,16 @@
+{
+  "name": "appwrite-function-administracion",
+  "version": "1.0.0",
+  "description": "Función de Appwrite para operaciones de administración (avisos, gastos, documentos, archivos).",
+  "main": "src/main.js",
+  "type": "module",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^28.0.0"
+  }
+}

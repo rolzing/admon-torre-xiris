@@ -7,20 +7,18 @@
 //  Cada función tiene UNA responsabilidad.
 // ============================================================
 
-import { storage, APPWRITE_CONFIG } from '../config/appwrite'
-import { APPWRITE_CONFIGURED } from '../config/appwrite'
+import { APPWRITE_CONFIG, APPWRITE_CONFIGURED } from '../config/appwrite'
 
 /**
  * Sube un archivo al bucket de Appwrite. Devuelve el fileId.
- * En demo solo simula la operación.
+ *
+ * NOTA: la subida real de archivos está en pausa (Appwrite v2 no expone
+ * el archivo en req.files de una function, y el patrón correcto sería
+ * subirlo desde el cliente directo al bucket de Storage). Mientras tanto
+ * se devuelve un placeholder para no romper el flujo de la UI.
  */
 export async function subirArchivo(file, name, mimeType) {
-  if (!APPWRITE_CONFIGURED) {
-    return { fileId: `demo-${Date.now()}`, name: file?.name || name }
-  }
-  // const res = await storage.createFile(APPWRITE_CONFIG.storageBucketId,
-  //   ID.unique(), file)
-  return { fileId: res.$id, name: file?.name || name }
+  return { fileId: `demo-${Date.now()}`, name: file?.name || name }
 }
 
 /**

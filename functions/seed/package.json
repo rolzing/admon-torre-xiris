@@ -1,0 +1,17 @@
+{
+  "name": "appwrite-function-seed",
+  "version": "1.0.0",
+  "description": "Script local para crear tablas y sembrar datos iniciales (unidades, avisos, gastos, pagos, documentos, estados de cuenta, fondo, usuarios).",
+  "main": "src/main.js",
+  "type": "module",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "seed": "node --env-file=.env src/main.js",
+    "start": "npm run seed"
+  },
+  "dependencies": {
+    "node-appwrite": "^28.0.0"
+  }
+}
