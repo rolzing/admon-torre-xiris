@@ -363,14 +363,18 @@ Reglas:
 - **No usar** mensajes sin prefijo de tipo (como «Agregar AGENTS.md») para cambios
   de código, porque no generan bump. Para solo-documentación se usa `docs:`.
 
-### Flujo normal (solo commits + push)
+### Flujo normal (commits + push + merge del PR de release)
 ```bash
 # 1) Commit con Conventional Commit
 git add <archivos>
 git commit -m "feat: <descripción en español>"
 
-# 2) Push a main — release-please bumpea, taguea y crea el release solo
+# 2) Push a main — release-please abre el PR de release (bump + changelog)
 git push origin main
+
+# 3) Mergear el PR de release que aparece (bumpea package.json)
+#    → al mergear se crea el tag vX.Y.Z y el GitHub Release
+gh pr merge <N> --merge     # o mergear desde la web
 ```
 
 ### Solo-documentación
@@ -392,6 +396,9 @@ git push origin main
 |---|---|
 | `v0.1.0` | Estado inicial: auth Appwrite, CORS producción, Vercel, seed local, AGENTS.md |
 
+> ⏳ **Estado actual:** abierto el **PR de release #1** (`chore(main): release condominio-portal 1.1.0`).
+> Al mergearlo se creará `v1.1.0` (incluye el `feat:` del versionado automático).
+>
 > Historial completo y changelog: pestaña **Releases** del repositorio.
 
 ---
