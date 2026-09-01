@@ -8,7 +8,7 @@ import Card from '../components/Card'
 import StatCard from '../components/StatCard'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
-import VersionLabel from '../components/VersionLabel'
+import Footer from '../components/Footer'
 import { TORRE } from '../config/torre'
 import { useFinanzas } from '../hooks/useFinanzas'
 import { useAvisos } from '../hooks/useAvisos'
@@ -39,8 +39,8 @@ export default function Inicio() {
   const avisos = (todosLosAvisos || []).slice(0, 3)
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-navy-950">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8 space-y-6 pb-8">
+    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-navy-950">
+      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:py-8 space-y-6 pb-8">
       {/* Hero */}
       <section className="rounded-2xl bg-navy-800 p-6 text-white shadow-card">
         <div className="flex items-center gap-3 mb-3">
@@ -242,10 +242,8 @@ export default function Inicio() {
         </Link>
       </section>
 
-      <div className="pt-2 text-center">
-        <VersionLabel />
       </div>
-      </div>
+      <Footer />
     </div>
   )
 }

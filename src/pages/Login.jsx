@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import Button from '../components/Button'
-import VersionLabel from '../components/VersionLabel'
+import Footer from '../components/Footer'
 import { IconoEdificio } from '../components/Icons'
 import { TORRE } from '../config/torre'
 
@@ -37,8 +37,9 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-navy-900 px-4 py-10">
-      <div className="w-full max-w-md">
+    <div className="flex min-h-screen flex-col bg-navy-900">
+      <div className="flex flex-1 items-center justify-center px-4 py-10">
+        <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-accent-600 text-white text-3xl shadow-lg mb-4">
             <IconoEdificio />
@@ -113,10 +114,9 @@ export default function Login() {
             </p>
           </div>
         </div>
-        <div className="mt-4 text-center">
-          <VersionLabel className="border-white/10 bg-white/10 text-slate-400 dark:border-white/10 dark:bg-white/10" />
         </div>
       </div>
+      <Footer className="border-white/10 bg-navy-900" />
     </div>
   )
 }
