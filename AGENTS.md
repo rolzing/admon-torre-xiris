@@ -377,6 +377,37 @@ git push origin main
 gh pr merge <N> --merge     # o mergear desde la web
 ```
 
+### Flujo de trabajo recomendado (PRs hacia main)
+Convención para el día a día: **trabajar en ramas y mergear PRs hacia `main`**.
+El merge a `main` es lo que dispara en paralelo el **deploy a producción (Vercel)** y
+el **PR de release** (release-please). El deploy NO espera a la release.
+
+```bash
+# 1) Crear rama de trabajo desde main
+git checkout -b feature/mi-cambio
+git commit -m "feat: <descripción>"
+
+# 2) Pushear la rama y abrir PR hacia main
+git push -u origin feature/mi-cambio
+gh pr create --base main --title "feat: <descripción>"
+
+# 3) Mergear el PR a main → dispara EN PARALELO:
+#    - Vercel: deploy a producción (automático, inmediato)
+#    - release-please: abre el PR de release (bump + CHANGELOG)
+gh pr merge <N> --merge   # o --squash (recomendado)
+
+# 4) Mergear el PR de release que aparece → crea tag + GitHub Release
+gh pr merge <M> --merge
+```
+
+Reglas:
+- **Usar `--squash`** al mergear el PR hacia main: colapsa los commits en uno, de
+  modo que la versión depende de un único mensaje (`feat:`/`fix:`) y el bump es
+  predecible.
+- Las ramas de feature NO disparan release ni deploy a prod; solo `main` lo hace.
+- El **deploy de Vercel es independiente** de la release: no espera al tag ni al
+  GitHub Release.
+
 ### Solo-documentación
 ```bash
 git commit -m "docs: actualizar AGENTS.md"
@@ -394,7 +425,8 @@ git push origin main
 ### Registro de versiones (los completa release-please en los GitHub Releases)
 | Tag | Descripción |
 |---|---|
-| `v1.1.1` | **Publicada.** Ajustes de documentación tras automatizar el versionado. Última versión. |
+| `v1.1.2` | **Publicada.** Última versión (docs + changelog de release). |
+| `v1.1.1` | **Publicada.** Ajustes de documentación tras automatizar el versionado. |
 | `v1.1.0` | **Publicada.** Versionado automático (release-please) + permiso write de Actions. |
 | `v0.1.0` | Estado inicial: auth Appwrite, CORS producción, Vercel, seed local, AGENTS.md |
 
