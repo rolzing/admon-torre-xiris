@@ -325,7 +325,54 @@ curl -X POST -H "Content-Type: application/json" -H "X-Appwrite-Project: 6a95ff1
 
 ---
 
-## 13. Notas de seguridad
+## 13. Control de versiones (versionado de cada release)
+
+> **Regla:** cada versión que se pushea a `main` debe quedar **versionada con un
+> git tag de semver**, para poder identificar/restaurar cada entrega.
+
+### Convención de versionado
+- Usar **SemVer** (`MAJOR.MINOR.PATCH`):
+  - **MAJOR** (v1, v2…): cambios que rompen compatibilidad (migraciones grandes,
+    cambios de arquitectura como Firebase→Appwrite).
+  - **MINOR** (v1.x): nuevas funcionalidades sin romper lo existente (nueva
+    pantalla, nueva acción de la function).
+  - **PATCH** (v1.x.y): correcciones de bugs, ajustes pequeños, docs.
+- Prefijo `v` en el tag (p.ej. `v1.0.0`).
+- Bumpear la versión también en `package.json` del frontend cuando aplique.
+
+### Flujo para publicar una versión
+1. Commitear y pushear los cambios (mensaje descriptivo en español).
+2. Decidir el bump (MAJOR/MINOR/PATCH) según el cambio.
+3. Crear el tag anotado apuntando al commit del release y pushearlo:
+
+```bash
+# Bump de versión en package.json (si aplica)
+npm version <major|minor|patch> --no-git-tag-version
+
+# Crear y pushear el tag de la versión
+git tag -a v1.0.0 -m "Release v1.0.0: <resumen breve>"
+git push origin main --tags
+```
+
+### Convención de commits
+- Mensajes descriptivos en **español**, iniciando con verbo o sustantivo
+  (estilo usado hasta ahora: «Migrar lecturas…», «Agregar AGENTS.md…»,
+  «Proteger .vercel y .env*…»).
+- Antes de commitear: `git status`, `git diff --stat` y `git log --oneline -5`
+  para revisar el alcance y seguir el estilo.
+- **No commitear** `.agents/`, `.claude/`, `.env*` (ni el `.env` real ni los de
+  las funciones): están fuera del alcance o gitignored.
+
+### Registro de versiones publicadas
+| Tag | Commit | Descripción |
+|---|---|---|
+| _(pendiente)_ | `6c2b709` | AGENTS.md + estado actual (auth Appwrite, CORS, Vercel, seed local) |
+
+> Mantener esta tabla actualizada en cada release para tener un historial claro.
+
+---
+
+## 14. Notas de seguridad
 
 - La API key **solo** vive en `.env` de las funciones (gitignored). Nunca en el
   frontend, bundle, ni en variables que el navegador pueda leer.
