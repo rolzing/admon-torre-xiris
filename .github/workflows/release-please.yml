@@ -16,10 +16,6 @@ jobs:
       - uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: node
-          package-name: condominio-portal
-          # Versionado automático por mensajes Conventional Commits:
-          #   feat:         -> MINOR (nueva funcionalidad)
-          #   fix: / chore: -> PATCH (corrección)
-          #   BREAKING CHANGE / feat!: -> MAJOR
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
           default-branch: main
