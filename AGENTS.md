@@ -394,10 +394,19 @@ git push origin main
 ### Registro de versiones (los completa release-please en los GitHub Releases)
 | Tag | Descripción |
 |---|---|
-| `v1.1.0` | **Publicada.** Versionado automático (release-please) + permiso write de Actions. Última versión. |
+| `v1.1.1` | **Publicada.** Ajustes de documentación tras automatizar el versionado. Última versión. |
+| `v1.1.0` | **Publicada.** Versionado automático (release-please) + permiso write de Actions. |
 | `v0.1.0` | Estado inicial: auth Appwrite, CORS producción, Vercel, seed local, AGENTS.md |
 
 > Historial completo y changelog: pestaña **Releases** del repositorio.
+
+### Flujo verificado (funcionando end-to-end)
+1. `git push origin main` con commits Conventional Commits.
+2. release-please (GitHub Action) calcula el bump y **abre un PR de release**.
+3. Mergear ese PR → release-please publica el **tag** y el **GitHub Release** automáticamente.
+
+> Cada push que contenga un `feat:`/`fix:` genera un PR de release con bump propio.
+> Los pushes de solo-documentación (`docs:`) generan bump PATCH (p.ej. 1.1.0 → 1.1.1).
 
 ---
 
