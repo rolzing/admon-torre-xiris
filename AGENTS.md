@@ -332,10 +332,19 @@ curl -X POST -H "Content-Type: application/json" -H "X-Appwrite-Project: 6a95ff1
 > 1. Analiza los mensajes de commit desde el último release.
 > 2. Calcula el bump SemVer automáticamente.
 > 3. Bumpea `package.json`.
-> 4. Crea un **tag** (`vX.Y.Z`) y un **GitHub Release** con el changelog.
+> 4. Abre un **PR de release** (bump + `CHANGELOG.md`). Al mergear ese PR, se
+>    crea el **tag** (`vX.Y.Z`) y el **GitHub Release**.
 >
 > Por eso **NO se debe crear tags manualmente** ni usar `npm version`; release-please
-> lo hace solo. El agente/desarrollador solo escribe mensajes de commit correctos.
+> lo hace solo. El agente/desarrollador solo escribe mensajes de commit correctos y
+> mergea el PR de release cuando aparece.
+
+### Requisito de permisos (GITHUB_TOKEN)
+release-please necesita que el Action tenga permiso de **escritura** en el repo y
+pueda **crear PRs**. Ya está configurado en Settings → Actions → General:
+`default_workflow_permissions: write` y `can_approve_pull_request_reviews: true`.
+> ⚠️ Si el Action falla con *"GitHub Actions is not permitted to create or approve
+> pull requests"*, revisar que esas dos opciones sigan habilitadas.
 
 ### Convención de commits (Conventional Commits) — REQUERIDO
 Para que el bump automático sea correcto, los mensajes de commit DEBEN seguir
