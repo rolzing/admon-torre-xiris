@@ -325,50 +325,65 @@ curl -X POST -H "Content-Type: application/json" -H "X-Appwrite-Project: 6a95ff1
 
 ---
 
-## 13. Control de versiones (versionado de cada release)
+## 13. Control de versiones (versionado automático con release-please)
 
-> **Regla:** cada versión que se pushea a `main` debe quedar **versionada con un
-> git tag de semver**, para poder identificar/restaurar cada entrega.
+> **Regla:** el versionado es **automático**. En cada push a `main`, el GitHub
+> Action `release-please` (`.github/workflows/release-please.yml`):
+> 1. Analiza los mensajes de commit desde el último release.
+> 2. Calcula el bump SemVer automáticamente.
+> 3. Bumpea `package.json`.
+> 4. Crea un **tag** (`vX.Y.Z`) y un **GitHub Release** con el changelog.
+>
+> Por eso **NO se debe crear tags manualmente** ni usar `npm version`; release-please
+> lo hace solo. El agente/desarrollador solo escribe mensajes de commit correctos.
 
-### Convención de versionado
-- Usar **SemVer** (`MAJOR.MINOR.PATCH`):
-  - **MAJOR** (v1, v2…): cambios que rompen compatibilidad (migraciones grandes,
-    cambios de arquitectura como Firebase→Appwrite).
-  - **MINOR** (v1.x): nuevas funcionalidades sin romper lo existente (nueva
-    pantalla, nueva acción de la function).
-  - **PATCH** (v1.x.y): correcciones de bugs, ajustes pequeños, docs.
-- Prefijo `v` en el tag (p.ej. `v1.0.0`).
-- Bumpear la versión también en `package.json` del frontend cuando aplique.
+### Convención de commits (Conventional Commits) — REQUERIDO
+Para que el bump automático sea correcto, los mensajes de commit DEBEN seguir
+**Conventional Commits**. El `release-please` mapea así:
 
-### Flujo para publicar una versión
-1. Commitear y pushear los cambios (mensaje descriptivo en español).
-2. Decidir el bump (MAJOR/MINOR/PATCH) según el cambio.
-3. Crear el tag anotado apuntando al commit del release y pushearlo:
+| Prefijo del mensaje | Bump | Ejemplo |
+|---|---|---|
+| `feat:` | **MINOR** | `feat: agregar panel de pagos` |
+| `fix:` | **PATCH** | `fix: corregir login en producción` |
+| `perf:`, `refactor:`, `docs:`, `chore:`, `test:` | **PATCH** (si aplica) o sin release | `docs: actualizar AGENTS.md` |
+| `BREAKING CHANGE` o `feat!:` | **MAJOR** | `feat!: migrar a Appwrite v2` |
 
+Reglas:
+- El mensaje empieza con el tipo + `:` + espacio + descripción en español.
+- Para cambios que rompen, añadir `!` tras el tipo o una línea `BREAKING CHANGE:`.
+- **No usar** mensajes sin prefijo de tipo (como «Agregar AGENTS.md») para cambios
+  de código, porque no generan bump. Para solo-documentación se usa `docs:`.
+
+### Flujo normal (solo commits + push)
 ```bash
-# Bump de versión en package.json (si aplica)
-npm version <major|minor|patch> --no-git-tag-version
+# 1) Commit con Conventional Commit
+git add <archivos>
+git commit -m "feat: <descripción en español>"
 
-# Crear y pushear el tag de la versión
-git tag -a v1.0.0 -m "Release v1.0.0: <resumen breve>"
-git push origin main --tags
+# 2) Push a main — release-please bumpea, taguea y crea el release solo
+git push origin main
 ```
 
-### Convención de commits
-- Mensajes descriptivos en **español**, iniciando con verbo o sustantivo
-  (estilo usado hasta ahora: «Migrar lecturas…», «Agregar AGENTS.md…»,
-  «Proteger .vercel y .env*…»).
-- Antes de commitear: `git status`, `git diff --stat` y `git log --oneline -5`
-  para revisar el alcance y seguir el estilo.
+### Solo-documentación
+```bash
+git commit -m "docs: actualizar AGENTS.md"
+git push origin main
+# No genera release nuevo (o solo PATCH según sea), pero se versiona igual.
+```
+
+### Recordatorios
+- Revisar antes de commitear: `git status`, `git diff --stat`, `git log --oneline -5`.
 - **No commitear** `.agents/`, `.claude/`, `.env*` (ni el `.env` real ni los de
   las funciones): están fuera del alcance o gitignored.
+- **No** crear tags ni releases manualmente: lo hace el Action.
+- El primer tag manual existente es `v0.1.0` (estado inicial de la automatización).
 
-### Registro de versiones publicadas
-| Tag | Commit | Descripción |
-|---|---|---|
-| _(pendiente)_ | `6c2b709` | AGENTS.md + estado actual (auth Appwrite, CORS, Vercel, seed local) |
+### Registro de versiones (los completa release-please en los GitHub Releases)
+| Tag | Descripción |
+|---|---|
+| `v0.1.0` | Estado inicial: auth Appwrite, CORS producción, Vercel, seed local, AGENTS.md |
 
-> Mantener esta tabla actualizada en cada release para tener un historial claro.
+> Historial completo y changelog: pestaña **Releases** del repositorio.
 
 ---
 

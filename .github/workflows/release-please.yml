@@ -1,0 +1,25 @@
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: condominio-portal
+          # Versionado automático por mensajes Conventional Commits:
+          #   feat:         -> MINOR (nueva funcionalidad)
+          #   fix: / chore: -> PATCH (corrección)
+          #   BREAKING CHANGE / feat!: -> MAJOR
+          default-branch: main
