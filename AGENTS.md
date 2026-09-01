@@ -394,11 +394,9 @@ git push origin main
 ### Registro de versiones (los completa release-please en los GitHub Releases)
 | Tag | Descripción |
 |---|---|
+| `v1.1.0` | **Publicada.** Versionado automático (release-please) + permiso write de Actions. Última versión. |
 | `v0.1.0` | Estado inicial: auth Appwrite, CORS producción, Vercel, seed local, AGENTS.md |
 
-> ⏳ **Estado actual:** abierto el **PR de release #1** (`chore(main): release condominio-portal 1.1.0`).
-> Al mergearlo se creará `v1.1.0` (incluye el `feat:` del versionado automático).
->
 > Historial completo y changelog: pestaña **Releases** del repositorio.
 
 ---
