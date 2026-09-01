@@ -5,15 +5,15 @@
 export default function Table({ columns, rows = [], emptyText = 'Sin datos' }) {
   if (!rows.length) {
     return (
-      <div className="py-10 text-center text-sm text-slate-400">{emptyText}</div>
+      <div className="py-10 text-center text-sm text-slate-400 dark:text-slate-500">{emptyText}</div>
     )
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-100">
+    <div className="overflow-hidden rounded-xl border border-slate-100 dark:border-slate-800">
       {/* Vista escritorio */}
       <table className="hidden w-full text-left text-sm md:table">
-        <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <thead className="bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:bg-navy-800 dark:text-slate-400">
           <tr>
             {columns.map((c) => (
               <th
@@ -27,9 +27,9 @@ export default function Table({ columns, rows = [], emptyText = 'Sin datos' }) {
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 bg-white">
+        <tbody className="divide-y divide-slate-100 bg-white dark:divide-slate-800 dark:bg-navy-900">
           {rows.map((row, i) => (
-            <tr key={i} className="hover:bg-slate-50/60">
+            <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-navy-800/60">
               {columns.map((c) => (
                 <td
                   key={c.key}
@@ -46,12 +46,12 @@ export default function Table({ columns, rows = [], emptyText = 'Sin datos' }) {
       </table>
 
       {/* Vista móvil: tarjetas */}
-      <div className="divide-y divide-slate-100 md:hidden">
+      <div className="divide-y divide-slate-100 dark:divide-slate-800 md:hidden">
         {rows.map((row, r) => (
-          <div key={r} className="px-4 py-3 space-y-2 bg-white">
+          <div key={r} className="px-4 py-3 space-y-2 bg-white dark:bg-navy-900">
             {columns.map((c) => (
               <div key={c.key} className="flex items-center justify-between gap-3 text-sm">
-                <span className="text-xs font-semibold uppercase text-slate-400">{c.label}</span>
+                <span className="text-xs font-semibold uppercase text-slate-400 dark:text-slate-500">{c.label}</span>
                 <span className={c.align === 'right' ? 'font-semibold' : ''}>
                   {c.render ? c.render(row[c.key], row) : row[c.key]}
                 </span>

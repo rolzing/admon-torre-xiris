@@ -27,8 +27,8 @@ export default function EstadosCuenta() {
   const columns = [
     { key: 'mes', label: 'Mes/Periodo', render: (m, row) => (
         <div>
-          <p className="font-medium text-navy-800">{m}</p>
-          <p className="text-xs text-slate-400">{row.periodo}</p>
+          <p className="font-medium text-navy-800 dark:text-slate-100">{m}</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">{row.periodo}</p>
         </div>
       ) },
     { key: 'cuota', label: 'Cuota', align: 'right', render: (c) => <span>{formatMoney(c)}</span> },
@@ -38,7 +38,7 @@ export default function EstadosCuenta() {
       render: (pagado) =>
         pagado ? <Badge tone="success">Pagado</Badge> : <Badge tone="danger">Pendiente</Badge>,
     },
-    { key: 'fechaPago', label: 'Fecha de pago', render: (f) => (f ? <span className="text-slate-600">{formatFecha(f)}</span> : <span className="text-slate-300">—</span>) },
+    { key: 'fechaPago', label: 'Fecha de pago', render: (f) => (f ? <span className="text-slate-600 dark:text-slate-300">{formatFecha(f)}</span> : <span className="text-slate-300 dark:text-slate-600">—</span>) },
     {
       key: 'recibo',
       label: 'Recibo',
@@ -53,7 +53,7 @@ export default function EstadosCuenta() {
             <IconoDescarga /> Descargar
           </Button>
         ) : (
-          <span className="text-slate-300">—</span>
+          <span className="text-slate-300 dark:text-slate-600">—</span>
         ),
     },
   ]
@@ -67,26 +67,26 @@ export default function EstadosCuenta() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">
             Adeudo actual
           </p>
-          <p className={`text-3xl font-extrabold ${totalAdeudo > 0 ? 'text-red-600' : 'text-accent-600'}`}>
+          <p className={`text-3xl font-extrabold ${totalAdeudo > 0 ? 'text-red-600 dark:text-red-400' : 'text-accent-600 dark:text-accent-400'}`}>
             {formatMoney(totalAdeudo)}
           </p>
         </Card>
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1">
             Próximo vencimiento
           </p>
-          <p className="text-3xl font-extrabold text-navy-900">5 de cada mes</p>
-          <p className="text-sm text-slate-500 mt-1">Cuota mensual de {formatMoney(1850)}</p>
+          <p className="text-3xl font-extrabold text-navy-900 dark:text-white">5 de cada mes</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Cuota mensual de {formatMoney(1850)}</p>
         </Card>
         <Card className="flex items-center justify-center">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 text-xl">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-50 text-accent-600 text-xl dark:bg-accent-500/15 dark:text-accent-400">
               <IconoRecibo />
             </div>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Los recibos se descargan desde cada fila pagada.
             </p>
           </div>
@@ -95,11 +95,11 @@ export default function EstadosCuenta() {
 
       <Card>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h3 className="font-bold text-navy-900">Historial de pagos</h3>
+          <h3 className="font-bold text-navy-900 dark:text-white">Historial de pagos</h3>
           <select
             value={filtro}
             onChange={(e) => setFiltro(e.target.value)}
-            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-accent-400"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-accent-400 dark:border-slate-700 dark:bg-navy-800 dark:text-slate-100"
           >
             <option value="">Todos los años</option>
             {periodos.map((p) => <option key={p} value={p}>{p}</option>)}

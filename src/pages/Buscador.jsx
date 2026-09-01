@@ -42,17 +42,17 @@ export default function Buscador() {
       <SearchBar onSearch={setQuery} />
 
       {query.trim() ? (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {total} resultado{total !== 1 && 's'} para «{query}»
         </p>
       ) : (
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-slate-400 dark:text-slate-500">
           Escribe una palabra, por ejemplo «asamblea», «agua», «reglamento» o «mantenimiento».
         </p>
       )}
 
       {query.trim() && total === 0 && (
-        <Card className="text-center text-sm text-slate-400 py-8">
+        <Card className="text-center text-sm text-slate-400 py-8 dark:text-slate-500">
           Sin coincidencias. Prueba con otra palabra clave.
         </Card>
       )}
@@ -62,8 +62,8 @@ export default function Buscador() {
           {avisos.map((a) => (
             <Link key={a.id} to="/avisos">
               <Row>
-                <p className="font-medium text-navy-800">{a.titulo}</p>
-                <p className="text-xs text-slate-400">{formatFechaLarga(a.fecha)}</p>
+                <p className="font-medium text-navy-800 dark:text-slate-100">{a.titulo}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">{formatFechaLarga(a.fecha)}</p>
               </Row>
             </Link>
           ))}
@@ -75,8 +75,8 @@ export default function Buscador() {
           {documentos.map((d) => (
             <Link key={d.id} to="/documentos">
               <Row>
-                <p className="font-medium text-navy-800">{d.titulo}</p>
-                <p className="text-xs text-slate-400">{d.tipo}</p>
+                <p className="font-medium text-navy-800 dark:text-slate-100">{d.titulo}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">{d.tipo}</p>
               </Row>
             </Link>
           ))}
@@ -89,10 +89,10 @@ export default function Buscador() {
             <Link key={g.id} to="/finanzas">
               <Row>
                 <div>
-                  <p className="font-medium text-navy-800">{g.concepto}</p>
-                  <p className="text-xs text-slate-400">{g.categoria}</p>
+                  <p className="font-medium text-navy-800 dark:text-slate-100">{g.concepto}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">{g.categoria}</p>
                 </div>
-                <span className="font-semibold text-red-600">{formatMoney(g.monto)}</span>
+                <span className="font-semibold text-red-600 dark:text-red-400">{formatMoney(g.monto)}</span>
               </Row>
             </Link>
           ))}
@@ -105,12 +105,12 @@ export default function Buscador() {
 function ResultSection({ title, icon, children }) {
   return (
     <div>
-      <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+      <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
         <span className="text-lg">{icon}</span>
         {title}
       </h2>
       <Card padding={false}>
-        <div className="divide-y divide-slate-100">{children}</div>
+        <div className="divide-y divide-slate-100 dark:divide-slate-800">{children}</div>
       </Card>
     </div>
   )
@@ -118,9 +118,9 @@ function ResultSection({ title, icon, children }) {
 
 function Row({ children }) {
   return (
-    <div className="group flex cursor-pointer items-center justify-between gap-3 px-5 py-3 transition hover:bg-slate-50">
+    <div className="group flex cursor-pointer items-center justify-between gap-3 px-5 py-3 transition hover:bg-slate-50 dark:hover:bg-navy-800/60">
       {children}
-      <IconoChevron className="h-4 w-4 shrink-0 text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-accent-500" />
+      <IconoChevron className="h-4 w-4 shrink-0 text-slate-300 transition-all group-hover:translate-x-1 group-hover:text-accent-500 dark:text-slate-600" />
     </div>
   )
 }
