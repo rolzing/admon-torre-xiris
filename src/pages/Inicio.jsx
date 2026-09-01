@@ -8,6 +8,8 @@ import Card from '../components/Card'
 import StatCard from '../components/StatCard'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
+import Reveal from '../components/Reveal'
+import Footer from '../components/Footer'
 import { TORRE } from '../config/torre'
 import { useFinanzas } from '../hooks/useFinanzas'
 import { useAvisos } from '../hooks/useAvisos'
@@ -38,32 +40,35 @@ export default function Inicio() {
   const avisos = (todosLosAvisos || []).slice(0, 3)
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-navy-950">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8 space-y-6 pb-8">
+    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-navy-950">
+      <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:py-8 space-y-6 pb-8">
       {/* Hero */}
-      <section className="rounded-2xl bg-navy-800 p-6 text-white shadow-card">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-600 text-xl">
-            <IconoEdificio />
+      <Reveal>
+        <section className="rounded-2xl bg-navy-800 p-6 text-white shadow-card">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-600 text-xl">
+              <IconoEdificio />
+            </div>
+            <div>
+              <h1 className="text-lg font-extrabold leading-tight">{TORRE.nombre}</h1>
+              <p className="text-xs text-slate-300">{TORRE.direccion}</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-extrabold leading-tight">{TORRE.nombre}</h1>
-            <p className="text-xs text-slate-300">{TORRE.direccion}</p>
+          <p className="text-sm text-slate-200">
+            Portal transparente de nuestra comunidad. Aquí encuentras la información general
+            de la torre, sin necesidad de buscar en chats.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link to="/login">
+              <Button className="px-4 py-2 text-sm">Iniciar sesión</Button>
+            </Link>
           </div>
-        </div>
-        <p className="text-sm text-slate-200">
-          Portal transparente de nuestra comunidad. Aquí encuentras la información general
-          de la torre, sin necesidad de buscar en chats.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link to="/login">
-            <Button className="px-4 py-2 text-sm">Iniciar sesión</Button>
-          </Link>
-        </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Saldo del fondo (público) */}
-      <section>
+      <Reveal delay={60}>
+        <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Fondo común
         </h2>
@@ -105,10 +110,12 @@ export default function Inicio() {
             icon={<IconoDolar />}
           />
         </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Deudores */}
-      <section>
+      <Reveal delay={100}>
+        <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Unidades deudoras
         </h2>
@@ -132,11 +139,13 @@ export default function Inicio() {
             Todas las unidades están al corriente 🎉
           </Card>
         )}
-      </section>
+        </section>
+      </Reveal>
 
       {/* Última asamblea */}
       {asamblea && (
-        <section>
+        <Reveal delay={140}>
+          <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Última asamblea
@@ -165,11 +174,13 @@ export default function Inicio() {
               </ul>
             )}
           </Card>
-        </section>
+          </section>
+        </Reveal>
       )}
 
       {/* Documentos */}
-      <section>
+      <Reveal delay={110}>
+        <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Documentos
@@ -194,10 +205,12 @@ export default function Inicio() {
             </Card>
           ))}
         </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Avisos */}
-      <section>
+      <Reveal delay={110}>
+        <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Últimos avisos
@@ -224,23 +237,28 @@ export default function Inicio() {
             </Card>
           ))}
         </div>
-      </section>
+        </section>
+      </Reveal>
 
       {/* Acceso a área privada */}
-      <section className="rounded-2xl bg-navy-800 p-6 text-white text-center shadow-card">
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-2xl">
-          <IconoUsuario />
-        </div>
-        <h3 className="text-lg font-bold">¿Eres residente?</h3>
-        <p className="mt-1 text-sm text-slate-200">
-          Inicia sesión para ver tu estado de cuenta, pagos y documentos confidenciales de tu
-          unidad.
-        </p>
-        <Link to="/login" className="mt-4 inline-block">
-          <Button>Entrar a mi cuenta</Button>
-        </Link>
-      </section>
+      <Reveal delay={120}>
+        <section className="rounded-2xl bg-navy-800 p-6 text-white text-center shadow-card">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-2xl">
+            <IconoUsuario />
+          </div>
+          <h3 className="text-lg font-bold">¿Eres residente?</h3>
+          <p className="mt-1 text-sm text-slate-200">
+            Inicia sesión para ver tu estado de cuenta, pagos y documentos confidenciales de tu
+            unidad.
+          </p>
+          <Link to="/login" className="mt-4 inline-block">
+            <Button>Entrar a mi cuenta</Button>
+          </Link>
+        </section>
+      </Reveal>
+
       </div>
+      <Footer />
     </div>
   )
 }
