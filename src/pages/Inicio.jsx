@@ -8,6 +8,7 @@ import Card from '../components/Card'
 import StatCard from '../components/StatCard'
 import Badge from '../components/Badge'
 import Button from '../components/Button'
+import VersionLabel from '../components/VersionLabel'
 import { TORRE } from '../config/torre'
 import { useFinanzas } from '../hooks/useFinanzas'
 import { useAvisos } from '../hooks/useAvisos'
@@ -240,6 +241,10 @@ export default function Inicio() {
           <Button>Entrar a mi cuenta</Button>
         </Link>
       </section>
+
+      <div className="pt-2 text-center">
+        <VersionLabel />
+      </div>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import Button from '../components/Button'
+import VersionLabel from '../components/VersionLabel'
 import { IconoEdificio } from '../components/Icons'
 import { TORRE } from '../config/torre'
 
@@ -111,6 +112,9 @@ export default function Login() {
               «demo123».
             </p>
           </div>
+        </div>
+        <div className="mt-4 text-center">
+          <VersionLabel className="border-white/10 bg-white/10 text-slate-400 dark:border-white/10 dark:bg-white/10" />
         </div>
       </div>
     </div>

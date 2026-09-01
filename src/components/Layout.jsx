@@ -2,12 +2,16 @@
 // centrado con fondo gris suave (slate-50) y buen whitespace.
 
 import Navbar from '../components/Navbar'
+import VersionLabel from './VersionLabel'
 
 export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-navy-950">
       <Navbar />
       <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8">{children}</main>
+      <footer className="mx-auto max-w-6xl px-4 pb-6 text-center">
+        <VersionLabel />
+      </footer>
     </div>
   )
 }
