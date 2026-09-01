@@ -9,7 +9,7 @@ export default function Card({
 }) {
   return (
     <div
-      className={`rounded-2xl bg-white shadow-card border border-slate-100 ${
+      className={`rounded-2xl bg-white shadow-card border border-slate-100 dark:bg-navy-900 dark:border-slate-800 dark:shadow-none ${
         padding ? 'p-5 sm:p-6' : ''
       } ${hover ? 'transition-shadow duration-200 hover:shadow-card-hover' : ''} ${className}`}
     >

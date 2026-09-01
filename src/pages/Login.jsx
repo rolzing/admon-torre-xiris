@@ -50,35 +50,35 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="rounded-2xl bg-white p-6 shadow-card">
-          <h2 className="mb-4 text-lg font-bold text-navy-900">Iniciar sesión</h2>
+        <div className="rounded-2xl bg-white p-6 shadow-card dark:bg-navy-900 dark:shadow-none">
+          <h2 className="mb-4 text-lg font-bold text-navy-900 dark:text-white">Iniciar sesión</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-600">Email</label>
+              <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tucorreo@ejemplo.com"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200 dark:border-slate-700 dark:bg-navy-800 dark:text-slate-100 dark:placeholder:text-slate-500"
                 required
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-600">Contraseña</label>
+              <label className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">Contraseña</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200 dark:border-slate-700 dark:bg-navy-800 dark:text-slate-100 dark:placeholder:text-slate-500"
                 required
               />
             </div>
 
             {error && (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/15 dark:text-red-300">{error}</p>
             )}
 
             <Button type="submit" className="w-full" disabled={loading}>
@@ -86,8 +86,8 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <div className="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-navy-800/60">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Cuentas demo
             </p>
             <div className="space-y-2">
@@ -99,14 +99,14 @@ export default function Login() {
                     setEmail(c.email)
                     setPassword(c.password)
                   }}
-                  className="flex w-full items-center justify-between rounded-lg bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50"
+                  className="flex w-full items-center justify-between rounded-lg bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50 dark:bg-navy-800 dark:hover:bg-navy-700"
                 >
-                  <span className="font-medium text-navy-800">{c.rol}</span>
-                  <span className="text-xs text-slate-400">{c.email}</span>
+                  <span className="font-medium text-navy-800 dark:text-slate-100">{c.rol}</span>
+                  <span className="text-xs text-slate-400 dark:text-slate-500">{c.email}</span>
                 </button>
               ))}
             </div>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
               Toca una cuenta para autocompletar y pulsa «Entrar». Otras unidades usan
               «demo123».
             </p>

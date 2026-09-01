@@ -3,9 +3,9 @@ import { useState } from 'react'
 
 const variants = {
   primary: 'bg-accent-600 text-white hover:bg-accent-700 shadow-sm',
-  secondary: 'bg-white text-navy-800 border border-slate-200 hover:bg-slate-50',
+  secondary: 'bg-white text-navy-800 border border-slate-200 hover:bg-slate-50 dark:bg-navy-800 dark:text-slate-100 dark:border-slate-700 dark:hover:bg-navy-700',
   danger: 'bg-red-600 text-white hover:bg-red-700',
-  ghost: 'text-navy-700 hover:bg-slate-100',
+  ghost: 'text-navy-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-navy-800',
 }
 
 export default function Button({

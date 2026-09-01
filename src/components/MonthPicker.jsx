@@ -96,4 +96,4 @@ export default function MonthPicker({ value, onChange, className = '' }) {
 }
 
 const selectCls =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200'
+  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200 dark:border-slate-700 dark:bg-navy-800 dark:text-slate-100'

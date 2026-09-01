@@ -21,8 +21,8 @@ export default function DashboardPersonal() {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-2xl font-extrabold text-navy-900">Mi panel</h1>
-        <p className="text-slate-500">
+        <h1 className="text-2xl font-extrabold text-navy-900 dark:text-white">Mi panel</h1>
+        <p className="text-slate-500 dark:text-slate-400">
           Unidad {usuario?.numero} · {usuario?.propietario}
         </p>
       </header>
@@ -42,33 +42,33 @@ export default function DashboardPersonal() {
           icon={<IconoReloj />}
         />
         <Card className="flex flex-col justify-center">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
             Cuota mensual
           </p>
-          <p className="text-3xl font-extrabold text-navy-900">{formatMoney(1850)}</p>
-          <p className="text-sm text-slate-500 mt-1">Fondo de reserva: {formatMoney(500)} extra</p>
+          <p className="text-3xl font-extrabold text-navy-900 dark:text-white">{formatMoney(1850)}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Fondo de reserva: {formatMoney(500)} extra</p>
         </Card>
       </div>
 
-      <Card>
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold text-navy-900">Mis últimos movimientos</h3>
-          <Link to="/estado-de-cuenta" className="text-sm font-semibold text-accent-600 hover:underline">
-            Ver historial completo
-          </Link>
-        </div>
-        <ul className="divide-y divide-slate-100">
-          {ultimosPagados.map((m) => (
-            <li key={m.periodo} className="flex items-center justify-between py-3">
-              <div>
-                <p className="font-medium text-navy-800">{m.mes}</p>
-                <p className="text-xs text-slate-400">Pagado el {formatFecha(m.fechaPago)}</p>
-              </div>
-              <span className="font-semibold text-accent-600">{formatMoney(m.cuota)}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
+        <Card>
+          <div className="mb-3 flex items-center justify-between">
+            <h3 className="font-bold text-navy-900 dark:text-white">Mis últimos movimientos</h3>
+            <Link to="/estado-de-cuenta" className="text-sm font-semibold text-accent-600 hover:underline">
+              Ver historial completo
+            </Link>
+          </div>
+          <ul className="divide-y divide-slate-100 dark:divide-slate-800">
+            {ultimosPagados.map((m) => (
+              <li key={m.periodo} className="flex items-center justify-between py-3">
+                <div>
+                  <p className="font-medium text-navy-800 dark:text-slate-100">{m.mes}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">Pagado el {formatFecha(m.fechaPago)}</p>
+                </div>
+                <span className="font-semibold text-accent-600 dark:text-accent-400">{formatMoney(m.cuota)}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
     </div>
   )
 }

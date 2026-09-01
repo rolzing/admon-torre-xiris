@@ -38,7 +38,8 @@ export default function Inicio() {
   const avisos = (todosLosAvisos || []).slice(0, 3)
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-navy-950">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:py-8 space-y-6 pb-8">
       {/* Hero */}
       <section className="rounded-2xl bg-navy-800 p-6 text-white shadow-card">
         <div className="flex items-center gap-3 mb-3">
@@ -63,7 +64,7 @@ export default function Inicio() {
 
       {/* Saldo del fondo (público) */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Fondo común
         </h2>
         <div className="grid grid-cols-2 gap-4">
@@ -71,17 +72,17 @@ export default function Inicio() {
           <Card className="col-span-2" hover>
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">
                   Dinero en la cuenta
                 </p>
-                <p className="text-3xl font-extrabold leading-tight text-accent-600">
+                <p className="text-3xl font-extrabold leading-tight text-accent-600 dark:text-accent-400">
                   {formatMoney(fondo?.saldoTotal)}
                 </p>
-                <p className="mt-1 font-mono text-sm font-semibold text-navy-800">
+                <p className="mt-1 font-mono text-sm font-semibold text-navy-800 dark:text-navy-200">
                   En cuenta {cuentaEnmascarada(fondo?.cuentaBancaria)}
                 </p>
               </div>
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-2xl">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-2xl dark:bg-navy-800 dark:text-navy-200">
                 <IconoDolar />
               </div>
             </div>
@@ -108,26 +109,26 @@ export default function Inicio() {
 
       {/* Deudores */}
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
           Unidades deudoras
         </h2>
         {morosas.length > 0 ? (
-          <Card className="border-amber-200 bg-amber-50/40">
-            <ul className="divide-y divide-amber-100">
+          <Card className="border-amber-200 bg-amber-50/40 dark:border-amber-500/30 dark:bg-amber-500/10">
+            <ul className="divide-y divide-amber-100 dark:divide-amber-500/20">
               {morosas.map((m) => (
                 <li key={m.numero} className="flex items-center justify-between gap-3 py-2.5">
-                  <span className="font-medium text-navy-800">Unidad {m.numero}</span>
+                  <span className="font-medium text-navy-800 dark:text-slate-100">Unidad {m.numero}</span>
                   <Badge tone="danger">{formatMoney(m.adeudo)}</Badge>
                 </li>
               ))}
             </ul>
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
               Por transparencia solo se muestra el número de unidad y el monto, sin datos
               sensibles adicionales.
             </p>
           </Card>
         ) : (
-          <Card className="text-center text-sm text-slate-500">
+          <Card className="text-center text-sm text-slate-500 dark:text-slate-400">
             Todas las unidades están al corriente 🎉
           </Card>
         )}
@@ -137,26 +138,26 @@ export default function Inicio() {
       {asamblea && (
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Última asamblea
             </h2>
             <Link to="/documentos" className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 hover:underline">
               Todas <IconoChevron />
             </Link>
           </div>
-          <Card className="border-accent-200 bg-gradient-to-br from-white to-accent-50/40">
+          <Card className="border-accent-200 bg-gradient-to-br from-white to-accent-50/40 dark:border-accent-500/30 dark:from-navy-900 dark:to-navy-800">
             <div className="flex items-center gap-2 mb-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-600 text-white">
                 <IconoCalendario />
               </span>
               <Badge tone="accent">Asamblea reciente</Badge>
             </div>
-            <h3 className="font-bold text-navy-900">{asamblea.titulo}</h3>
-            <p className="text-sm text-slate-500">{formatFechaLarga(asamblea.fecha)}</p>
+            <h3 className="font-bold text-navy-900 dark:text-white">{asamblea.titulo}</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">{formatFechaLarga(asamblea.fecha)}</p>
             {asamblea.resumenAcuerdos && (
               <ul className="mt-3 space-y-1.5">
                 {asamblea.resumenAcuerdos.map((a, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300">
                     <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-500" />
                     {a}
                   </li>
@@ -170,7 +171,7 @@ export default function Inicio() {
       {/* Documentos */}
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Documentos
           </h2>
           <Link to="/documentos" className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 hover:underline">
@@ -181,13 +182,13 @@ export default function Inicio() {
           {documentos.map((d) => (
             <Card key={d.id} hover className="p-4">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-lg">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600 text-lg dark:bg-navy-800 dark:text-navy-200">
                   <IconoDocumento />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs text-slate-400">{d.tipo}</p>
-                  <p className="font-semibold text-navy-900 leading-snug">{d.titulo}</p>
-                  <p className="text-xs text-slate-500">{formatFechaLarga(d.fecha)}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">{d.tipo}</p>
+                  <p className="font-semibold text-navy-900 leading-snug dark:text-slate-100">{d.titulo}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{formatFechaLarga(d.fecha)}</p>
                 </div>
               </div>
             </Card>
@@ -198,7 +199,7 @@ export default function Inicio() {
       {/* Avisos */}
       <section>
         <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
             Últimos avisos
           </h2>
           <Link to="/avisos" className="inline-flex items-center gap-1 text-sm font-semibold text-accent-600 hover:underline">
@@ -209,15 +210,15 @@ export default function Inicio() {
           {avisos.map((a) => (
             <Card key={a.id} hover className="p-4">
               <div className="flex items-start gap-3">
-                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base ${a.importante ? 'bg-red-50 text-red-600' : 'bg-navy-50 text-navy-600'}`}>
+                <div className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base ${a.importante ? 'bg-red-50 text-red-600 dark:bg-red-500/15 dark:text-red-400' : 'bg-navy-50 text-navy-600 dark:bg-navy-800 dark:text-navy-200'}`}>
                   <IconoAviso />
                 </div>
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-semibold text-navy-900 leading-snug">{a.titulo}</p>
+                    <p className="font-semibold text-navy-900 leading-snug dark:text-slate-100">{a.titulo}</p>
                     {a.importante && <Badge tone="danger">Importante</Badge>}
                   </div>
-                  <p className="text-xs text-slate-400">{formatFechaLarga(a.fecha)}</p>
+                  <p className="text-xs text-slate-400 dark:text-slate-500">{formatFechaLarga(a.fecha)}</p>
                 </div>
               </div>
             </Card>
@@ -239,6 +240,7 @@ export default function Inicio() {
           <Button>Entrar a mi cuenta</Button>
         </Link>
       </section>
+      </div>
     </div>
   )
 }

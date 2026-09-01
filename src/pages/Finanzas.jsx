@@ -27,15 +27,15 @@ export default function Finanzas() {
   const gastoColumns = [
     { key: 'categoria', label: 'Categoría', render: (c) => <Badge tone={categoriaTone(c)}>{c}</Badge> },
     { key: 'concepto', label: 'Concepto' },
-    { key: 'fecha', label: 'Fecha', render: (f) => <span className="text-slate-500">{formatFecha(f)}</span> },
+    { key: 'fecha', label: 'Fecha', render: (f) => <span className="text-slate-500 dark:text-slate-400">{formatFecha(f)}</span> },
     { key: 'monto', label: 'Monto', align: 'right', render: (m) => <span className="font-semibold">{formatMoney(m)}</span> },
   ]
 
   const pagoColumns = [
     { key: 'unidad', label: 'Unidad', render: (u) => <span className="font-semibold">U-{u}</span> },
     { key: 'concepto', label: 'Concepto' },
-    { key: 'fecha', label: 'Fecha', render: (f) => <span className="text-slate-500">{formatFecha(f)}</span> },
-    { key: 'monto', label: 'Monto', align: 'right', render: (m) => <span className="font-semibold text-accent-600">{formatMoney(m)}</span> },
+    { key: 'fecha', label: 'Fecha', render: (f) => <span className="text-slate-500 dark:text-slate-400">{formatFecha(f)}</span> },
+    { key: 'monto', label: 'Monto', align: 'right', render: (m) => <span className="font-semibold text-accent-600 dark:text-accent-400">{formatMoney(m)}</span> },
   ]
 
   return (
@@ -71,8 +71,8 @@ export default function Finanzas() {
 
       {/* Morosidad */}
       {morosas.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50/50">
-          <h3 className="mb-2 font-bold text-navy-900">
+        <Card className="border-amber-200 bg-amber-50/50 dark:border-amber-500/30 dark:bg-amber-500/10">
+          <h3 className="mb-2 font-bold text-navy-900 dark:text-white">
             Unidades con adeudo pendiente
           </h3>
           <div className="flex flex-wrap gap-2">
@@ -82,7 +82,7 @@ export default function Finanzas() {
               </Badge>
             ))}
           </div>
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
             Solo se muestra número de unidad y monto; no se exponen otros datos sensibles.
           </p>
         </Card>
@@ -91,7 +91,7 @@ export default function Finanzas() {
       {/* Egresos del mes */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold text-navy-900">Gastos del mes ({gastos.length})</h3>
+          <h3 className="font-bold text-navy-900 dark:text-white">Gastos del mes ({gastos.length})</h3>
           <span className="text-sm font-semibold text-red-600">{formatMoney(egresos)}</span>
         </div>
         <Table columns={gastoColumns} rows={gastos} />
@@ -100,7 +100,7 @@ export default function Finanzas() {
       {/* Ingresos del mes */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold text-navy-900">Cuotas recibidas ({pagos.length})</h3>
+          <h3 className="font-bold text-navy-900 dark:text-white">Cuotas recibidas ({pagos.length})</h3>
           <span className="text-sm font-semibold text-accent-600">{formatMoney(ingresos)}</span>
         </div>
         <Table columns={pagoColumns} rows={pagos} />

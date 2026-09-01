@@ -111,7 +111,7 @@ export default function AdminPanel() {
 
       {/* Avisos */}
       <Card>
-        <h3 className="mb-3 font-bold text-navy-900">Publicar nuevo aviso</h3>
+        <h3 className="mb-3 font-bold text-navy-900 dark:text-white">Publicar nuevo aviso</h3>
         <form onSubmit={handleAviso} className="space-y-3">
           <Field label="Título">
             <input
@@ -132,7 +132,7 @@ export default function AdminPanel() {
               required
             />
           </Field>
-          <label className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
             <input
               type="checkbox"
               checked={aviso.importante}
@@ -142,7 +142,7 @@ export default function AdminPanel() {
           </label>
 
           <div>
-            <span className="mb-1 block text-sm font-medium text-slate-600">
+            <span className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
               Imágenes (máximo 2)
             </span>
             <div className="flex flex-wrap items-center gap-3">
@@ -151,7 +151,7 @@ export default function AdminPanel() {
                   <img
                     src={img.preview}
                     alt={`aviso-${i + 1}`}
-                    className="h-20 w-20 rounded-xl border border-slate-200 object-cover"
+                    className="h-20 w-20 rounded-xl border border-slate-200 object-cover dark:border-slate-700"
                   />
                   <button
                     type="button"
@@ -164,7 +164,7 @@ export default function AdminPanel() {
                 </div>
               ))}
               {aviso.imagenes.length < 2 && (
-                <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 text-slate-400 hover:border-accent-400 hover:text-accent-500">
+                <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 text-slate-400 hover:border-accent-400 hover:text-accent-500 dark:border-slate-600 dark:text-slate-500">
                   <span className="text-xl">+</span>
                   <span className="text-[10px]">Foto</span>
                   <input
@@ -181,7 +181,7 @@ export default function AdminPanel() {
               )}
             </div>
             {aviso.imagenes.length >= 2 && (
-              <p className="mt-1 text-xs text-slate-400">Máximo 2 fotos.</p>
+              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">Máximo 2 fotos.</p>
             )}
           </div>
 
@@ -192,7 +192,7 @@ export default function AdminPanel() {
 
       {/* Documentos */}
       <Card>
-        <h3 className="mb-3 font-bold text-navy-900">Subir documento</h3>
+        <h3 className="mb-3 font-bold text-navy-900 dark:text-white">Subir documento</h3>
         <form onSubmit={handleDoc} className="space-y-3">
           <Field label="Tipo de documento">
             <select
@@ -229,7 +229,7 @@ export default function AdminPanel() {
           </Field>
           <Button type="submit">Subir documento</Button>
           {docMsg && <p className="text-sm text-accent-600">{docMsg}</p>}
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400 dark:text-slate-500">
             Demo sin carga real de archivos. En producción se usa Appwrite Storage.
           </p>
         </form>
@@ -238,8 +238,8 @@ export default function AdminPanel() {
       {/* Gastos */}
       <Card>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold text-navy-900">Registrar gasto del mes</h3>
-          <span className="text-xs text-slate-400">{gastos.length} registrados</span>
+          <h3 className="font-bold text-navy-900 dark:text-white">Registrar gasto del mes</h3>
+          <span className="text-xs text-slate-400 dark:text-slate-500">{gastos.length} registrados</span>
         </div>
         <form onSubmit={handleGasto} className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Field label="Concepto">
@@ -283,13 +283,13 @@ export default function AdminPanel() {
             />
           </Field>
           <div className="sm:col-span-2 lg:col-span-4">
-            <span className="mb-1 block text-sm font-medium text-slate-600">
+            <span className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">
               Factura (archivo)
             </span>
-            <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-500 hover:border-accent-400 hover:text-accent-600">
+            <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed border-slate-300 bg-white px-3 py-3 text-sm text-slate-500 hover:border-accent-400 hover:text-accent-600 dark:border-slate-600 dark:bg-navy-800 dark:text-slate-400">
               <span className="text-lg">📎</span>
               {gasto.factura ? (
-                <span className="font-medium text-navy-800">{gasto.factura.name}</span>
+                <span className="font-medium text-navy-800 dark:text-slate-100">{gasto.factura.name}</span>
               ) : (
                 <span>Adjuntar factura (PDF o imagen)</span>
               )}
@@ -331,15 +331,15 @@ export default function AdminPanel() {
 
       {/* Estados de cuenta */}
       <Card>
-        <h3 className="mb-3 font-bold text-navy-900">Estados de cuenta por unidad</h3>
+        <h3 className="mb-3 font-bold text-navy-900 dark:text-white">Estados de cuenta por unidad</h3>
         <div className="space-y-3">
           {(unidades || []).map((u) => {
             const pend = (u.pendientes || []).filter(Boolean)
             return (
-              <div key={u.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-3">
+              <div key={u.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50/50 p-3 dark:border-slate-700 dark:bg-navy-800/60">
                 <div>
-                  <p className="font-semibold text-navy-800">Unidad {u.numero} · {u.propietario}</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="font-semibold text-navy-800 dark:text-slate-100">Unidad {u.numero} · {u.propietario}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     {pend.length > 0
                       ? `Pendientes: ${pend.join(', ')}`
                       : 'Al corriente'}
@@ -364,8 +364,8 @@ export default function AdminPanel() {
 
       {/* Morosos resumen */}
       {unidadesMorosas.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50/40">
-          <h3 className="mb-2 font-bold text-navy-900">Unidades con adeudo</h3>
+        <Card className="border-amber-200 bg-amber-50/40 dark:border-amber-500/30 dark:bg-amber-500/10">
+          <h3 className="mb-2 font-bold text-navy-900 dark:text-white">Unidades con adeudo</h3>
           <div className="flex flex-wrap gap-2">
             {unidadesMorosas.map((u) => (
               <Badge key={u.id} tone="danger">
@@ -381,9 +381,9 @@ export default function AdminPanel() {
 
 function NoticeBackend() {
   return (
-    <Card className="border-dashed border-2 border-slate-200 bg-slate-50">
-      <p className="text-sm text-slate-600">
-        <span className="font-semibold text-navy-800">Nota:</span> En este demo los datos son de
+    <Card className="border-dashed border-2 border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-navy-800/60">
+      <p className="text-sm text-slate-600 dark:text-slate-300">
+        <span className="font-semibold text-navy-800 dark:text-slate-100">Nota:</span> En este demo los datos son de
         ejemplo. En producción, esta información se almacenaría en <span className="font-semibold">Appwrite</span>:
         la base de datos (Database) para avisos, gastos y documentos, y Storage para los archivos.
         El panel de {TORRE.administrador} reflejaría los cambios al guardar.
@@ -393,12 +393,12 @@ function NoticeBackend() {
 }
 
 const inputCls =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200'
+  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-accent-400 focus:ring-2 focus:ring-accent-200 dark:border-slate-700 dark:bg-navy-800 dark:text-slate-100'
 
 function Field({ label, children }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-sm font-medium text-slate-600">{label}</span>
+      <span className="mb-1 block text-sm font-medium text-slate-600 dark:text-slate-300">{label}</span>
       {children}
     </label>
   )
