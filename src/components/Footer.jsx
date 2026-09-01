@@ -1,7 +1,6 @@
 // Footer discreto y profesional para toda la app.
-// Muestra versión (calculada por release-please via VersionLabel),
-// crédito a Ricardo LH con enlaces a LinkedIn y web personal,
-// y un pequeño disclaimer sin ánimo de lucro.
+// Muestra versión (calculada por release-please via VersionLabel)
+// y crédito a Ricardo LH con enlaces a LinkedIn y web personal.
 
 import VersionLabel from './VersionLabel'
 import { IconoLinkedIn, IconoWeb } from './Icons'
@@ -15,12 +14,7 @@ export default function Footer({ className = '' }) {
       className={`mt-auto border-t border-slate-200 bg-white/70 backdrop-blur dark:border-slate-800 dark:bg-navy-900/40 ${className}`}
     >
       <div className="mx-auto max-w-6xl px-4 py-4">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-md text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-            WebApp sin ánimo de lucro — Creada para facilitar la transparencia y la
-            comunicación de la comunidad. Sin publicidad ni uso comercial.
-          </p>
-
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-end">
           <div className="flex shrink-0 items-center gap-2.5">
             <span className="text-xs text-slate-500 dark:text-slate-400">
               Hecho por{' '}
