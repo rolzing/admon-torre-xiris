@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/rolzing/admon-torre-xiris/compare/condominio-portal-v1.2.0...condominio-portal-v1.3.0) (2026-09-01)
+
+
+### 🚀 Features
+
+* agregar label de versión actual (v1.2.0) basado en release-please ([#6](https://github.com/rolzing/admon-torre-xiris/issues/6)) ([57d8127](https://github.com/rolzing/admon-torre-xiris/commit/57d8127167a57f696f439c8c525bc829e94baa08))
+
 ## [1.2.0](https://github.com/rolzing/admon-torre-xiris/compare/condominio-portal-v1.1.2...condominio-portal-v1.2.0) (2026-09-01)
 
 
