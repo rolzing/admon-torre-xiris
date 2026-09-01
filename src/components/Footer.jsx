@@ -6,9 +6,8 @@
 import VersionLabel from './VersionLabel'
 import { IconoLinkedIn, IconoWeb } from './Icons'
 
-// TODO: reemplaza estas URLs por tus enlaces reales cuando los tengas
-const LINKEDIN_URL = 'https://www.linkedin.com/in/ricardo-lh'
-const WEB_URL = 'https://ricardolh.dev'
+const LINKEDIN_URL = 'https://www.linkedin.com/in/riclopezh/'
+const WEB_URL = 'https://rolzing.github.io/website/'
 
 export default function Footer({ className = '' }) {
   return (
