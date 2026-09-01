@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/rolzing/admon-torre-xiris/compare/condominio-portal-v1.1.2...condominio-portal-v1.2.0) (2026-09-01)
+
+
+### 🚀 Features
+
+* agregar dark mode con prefers-color-scheme y corregir layout de Inicio ([#5](https://github.com/rolzing/admon-torre-xiris/issues/5)) ([8104014](https://github.com/rolzing/admon-torre-xiris/commit/81040145eda13cc497513a11b58bbd9f4b27ec6f))
+
+
+### 📖 Documentation
+
+* guia de flujo con PRs hacia main (vercionado + deploy) ([3dd42cb](https://github.com/rolzing/admon-torre-xiris/commit/3dd42cb26e6027be091857bd9c0cd7923da0b4a9))
+
 ## [1.1.2](https://github.com/rolzing/admon-torre-xiris/compare/condominio-portal-v1.1.1...condominio-portal-v1.1.2) (2026-09-01)
 
 
