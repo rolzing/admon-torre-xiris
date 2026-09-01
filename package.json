@@ -1,7 +1,7 @@
 {
   "name": "condominio-portal",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "description": "Portal informativo para administración de un condominio/residencial. Reemplaza el caos del chat de WhatsApp con información clara y consultable.",
   "engines": {
